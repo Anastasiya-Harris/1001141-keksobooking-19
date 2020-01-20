@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Анастасия Харисова](https://up.htmlacademy.ru/javascript/19/user/1001141).
-* Наставник: `Неизвестно`.
+* Наставник: [Андрей Филяев] (https://github.com/Soheevich).
 
 ---
 
