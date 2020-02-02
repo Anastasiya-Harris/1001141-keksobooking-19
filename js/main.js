@@ -101,10 +101,12 @@ var renderPins = function() {
     pinElement.style.top = (ad.location.y - PIN_HEIGHT) + 'px';
     pinElement.querySelector('img').src = ad.author.avatar;
     pinElement.querySelector('img').alt = ad.offer.title;
+
+    //Записываем объявления во фрагмент
     fragment.appendChild(pinElement);
   }
 
-  // Записываем объявления во фрагмент и вставляем в .map__pins
+  // Вставляем фрагмент в .map__pins
   pinListElement.appendChild(fragment);
 
   // Показывает карту
