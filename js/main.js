@@ -27,8 +27,8 @@ var getRandomNumber = function (min, max) {
 
 // Возвращает один рандомный элемент из переданного массива.
 var getRandomFromArray = function (array) {
-  var randomIndex  = getRandomNumber(0, array.length - 1);
-  return array[randomIndex ];
+  var randomIndex = getRandomNumber(0, array.length - 1);
+  return array[randomIndex];
 };
 
 
