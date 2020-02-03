@@ -27,8 +27,8 @@ var getRandomNumber = function (min, max) {
 
 // Возвращает один рандомный элемент из переданного массива.
 var getRandomFromArray = function (array) {
-  var randomFromArray = getRandomNumber(0, array.length - 1);
-  return array[randomFromArray];
+  var randomIndex  = getRandomNumber(0, array.length - 1);
+  return array[randomIndex ];
 };
 
 
@@ -43,14 +43,14 @@ var getRandomArrayFromArray = function (array) {
 var getAdsArray = function () {
   var adsArray = [];
   for (var i = 0; i < MAX_ARRAY_LENGTH_OF_PINS; i++) {
-    var ad = createAds(i);
+    var ad = createAd(i);
     adsArray.push(ad);
   }
   return adsArray;
 };
 
 // Создаёт объект объявление с переданным индексом
-var createAds = function (i) {
+var createAd = function (i) {
   var locationX = getRandomNumber(0, mapWidth);
   var locationY = getRandomNumber(MIN_MAP_HIGHT, MAX_MAP_HIGHT);
 
