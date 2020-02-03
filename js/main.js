@@ -6,8 +6,8 @@ var CHECKINS = ['12:00', '13:00', '14:00'];
 var CHECKOUTS = ['12:00', '13:00', '14:00'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
-var MAX_PRICE = 1000;
-var MIN_PRICE = 100000;
+var MAX_PRICE = 0;
+var MIN_PRICE = 1000000;
 
 var MIN_MAP_HIGHT = 130;
 var MAX_MAP_HIGHT = 630;
@@ -17,6 +17,11 @@ var MAX_ARRAY_LENGTH_OF_PINS = 8;
 
 var PIN_HEIGHT = 50;
 var PIN_WIDTH = 70;
+
+var MAIN_PIN_HEIGHT = 156;
+var MAIN_PIN_WIDTH = 156;
+
+
 
 
 // Возвращает рандомное число в диапазоне между параметрами min и max включительно.
@@ -110,6 +115,74 @@ var renderPins = function () {
   pinListElement.appendChild(fragment);
 
   // Показывает карту
-  map.classList.remove('map--faded');
+  // map.classList.remove('map--faded');
 };
 renderPins();
+
+
+//Новое задание /////////////////////////////////////////////////////////////////
+
+// 1) Неактивное состояние.
+// .ad-form содержит класс ad-form--disabled
+// Все <input> и <select> формы .ad-form заблокированы с помощью атрибута disabled,
+// добавленного на них или на их родительские блоки fieldset;
+// Форма с фильтрами .map__filters заблокирована так же, как и форма .ad-form;
+var mapFilters = document.querySelector('.map__filters');
+var adForm = document.querySelector('.ad-form');
+var fieldets = document.querySelectorAll('.form__element');
+
+mapFilters.setAttribute("disabled", "disabled"); ///не работает
+fieldets.setAttribute("disabled", "disabled"); ///не работает
+
+
+// 2) Переводит страницу в активный режим.
+// Первое взаимодействие с меткой (mousedown) переводит страницу в активное состояние.
+var mapPinMain= document.querySelector('.map__pin--main');
+
+var mainPinMousedownHandler = function () {
+  adForm.classList.remove('ad-form--disabled');
+};
+
+mapPinMain.addEventListener('mousedown', mainPinMousedownHandler);
+
+// Функция добавления и удаления атрибута disabled у формы
+
+
+// 3) Заполнение поля адреса при mousedown на mapPinMain
+// Формат значения поля адреса: {{x}}, {{y}}, где {{x}} и {{y}} это координаты,
+// на которые метка указывает своим острым концом. Например, если метка .map__pin--main
+// имеет CSS-координаты top: 200px; left: 300px, то в поле адрес должно быть записано
+// значение 300 + расстояние до острого конца по горизонтали, 200 + расстояние до острого конца по вертикали.
+//  Координаты не должны быть дробными.
+
+
+// 5) Валидация
+// Поле Цена за ночь:
+// Обязательное поле;
+// Числовое поле;
+// Максимальное значение — 1 000 000.
+// 3.3. Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»:
+// «Бунгало» — минимальная цена за ночь 0;
+// «Квартира» — минимальная цена за ночь 1 000;
+// «Дом» — минимальная цена 5 000;
+// «Дворец» — минимальная цена 10 000.
+
+// Валидация
+// Второй подход заключается в использовании встроенного API для валидации.
+// Вы пишите код проверки соответствия и если выбранное количество гостей не
+// подходит под количество комнат, вызываете метод setCustomValidity.
+// selectElt.setCustomValidity(string);
+
+{/* <label>Feeling: <input name=f type="text" oninput="check(this)"></label>
+<script>
+ function check(input) {
+   if (input.value == "good" ||
+       input.value == "fine" ||
+       input.value == "tired") {
+     input.setCustomValidity('"' + input.value + '" is not a feeling.');
+   } else {
+     // input is fine -- reset the error message
+     input.setCustomValidity('');
+   }
+ }
+</script> */}
