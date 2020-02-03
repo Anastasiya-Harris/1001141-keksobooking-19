@@ -91,10 +91,10 @@ var renderPins = function () {
   var fragment = document.createDocumentFragment();
 
   // копируем по ссылке массив объявлений
-  var ads = getAdsArray ();
+  var ads = getAdsArray();
 
   // Клонируем темплейт объявления
-  for (var i = 0; i < ads.length; i++ ) {
+  for (var i = 0; i < ads.length; i++) {
     var pinElement = template.cloneNode(true);
     var ad = ads[i];
     pinElement.style.left = (ad.location.x - PIN_WIDTH / 2) + 'px';
