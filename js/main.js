@@ -10,7 +10,7 @@ var MAX_PRICE = 1000;
 var MIN_PRICE = 100000;
 
 var MIN_MAP_HIGHT = 130;
-var MAX_MAP_HIGHT = 630
+var MAX_MAP_HIGHT = 630;
 var mapWidth = document.querySelector('.map__overlay').offsetWidth;
 
 var MAX_ARRAY_LENGTH_OF_PINS = 8;
@@ -27,7 +27,7 @@ var getRandomNumber = function (min, max) {
 
 // Возвращает один рандомный элемент из переданного массива.
 var getRandomFromArray = function (array) {
-  var randomFromArray = getRandomNumber(0, array.length - 1)
+  var randomFromArray = getRandomNumber(0, array.length - 1);
   return array[randomFromArray];
 };
 
@@ -36,11 +36,11 @@ var getRandomFromArray = function (array) {
 var getRandomArrayFromArray = function (array) {
   var maxLength = getRandomNumber(1, array.length + 1);
   return array.slice(0, maxLength);
-}
+};
 
 
 // Создаёт массив переданной длинны из объекта объявления.
-var getAdsArray = function() {
+var getAdsArray = function () {
   var adsArray = [];
   for (var i = 0; i < MAX_ARRAY_LENGTH_OF_PINS; i++) {
     var ad = createAds(i);
@@ -61,7 +61,7 @@ var createAds = function (i) {
 
     offer: {
       'title': 'string',
-      'address': locationX + ', '+ locationY,
+      'address': locationX + ', ' + locationY,
       'price': getRandomNumber(MIN_PRICE, MAX_PRICE),
       'type': getRandomFromArray(TYPE),
       'rooms': getRandomNumber(1, 5),
@@ -81,7 +81,7 @@ var createAds = function (i) {
 };
 
 // Отрисовывает во фрагменте сгенерированные DOM элементы в блок .map__pin
-var renderPins = function() {
+var renderPins = function () {
   var map = document.querySelector('.map');
 
   var template = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -91,7 +91,7 @@ var renderPins = function() {
   var fragment = document.createDocumentFragment();
 
   // копируем по ссылке массив объявлений
-  var ads = getAdsArray();
+  var ads = getAdsArray ();
 
   // Клонируем темплейт объявления
   for (var i = 0; i < ads.length; i++ ) {
@@ -102,7 +102,7 @@ var renderPins = function() {
     pinElement.querySelector('img').src = ad.author.avatar;
     pinElement.querySelector('img').alt = ad.offer.title;
 
-    //Записываем объявления во фрагмент
+    // Записываем объявления во фрагмент
     fragment.appendChild(pinElement);
   }
 
@@ -111,5 +111,5 @@ var renderPins = function() {
 
   // Показывает карту
   map.classList.remove('map--faded');
-}
+};
 renderPins();
