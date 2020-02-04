@@ -22,8 +22,6 @@ var MAIN_PIN_HEIGHT = 156;
 var MAIN_PIN_WIDTH = 156;
 
 
-
-
 // Возвращает рандомное число в диапазоне между параметрами min и max включительно.
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -120,7 +118,7 @@ var renderPins = function () {
 renderPins();
 
 
-//Новое задание /////////////////////////////////////////////////////////////////
+// Новое задание /////////////////////////////////////////////////////////////////
 
 // 1) Неактивное состояние.
 // .ad-form содержит класс ad-form--disabled
@@ -131,13 +129,13 @@ var mapFilters = document.querySelector('.map__filters');
 var adForm = document.querySelector('.ad-form');
 var fieldets = document.querySelectorAll('.form__element');
 
-mapFilters.setAttribute("disabled", "disabled"); ///не работает
-fieldets.setAttribute("disabled", "disabled"); ///не работает
+mapFilters.setAttribute('disabled', 'disabled'); // не работает
+fieldets.setAttribute('disabled', 'disabled'); // не работает
 
 
 // 2) Переводит страницу в активный режим.
 // Первое взаимодействие с меткой (mousedown) переводит страницу в активное состояние.
-var mapPinMain= document.querySelector('.map__pin--main');
+var mapPinMain = document.querySelector('.map__pin--main');
 
 var mainPinMousedownHandler = function () {
   adForm.classList.remove('ad-form--disabled');
@@ -173,16 +171,16 @@ mapPinMain.addEventListener('mousedown', mainPinMousedownHandler);
 // подходит под количество комнат, вызываете метод setCustomValidity.
 // selectElt.setCustomValidity(string);
 
-{/* <label>Feeling: <input name=f type="text" oninput="check(this)"></label>
-<script>
- function check(input) {
-   if (input.value == "good" ||
-       input.value == "fine" ||
-       input.value == "tired") {
-     input.setCustomValidity('"' + input.value + '" is not a feeling.');
-   } else {
-     // input is fine -- reset the error message
-     input.setCustomValidity('');
-   }
- }
-</script> */}
+// {/* <label>Feeling: <input name=f type="text" oninput="check(this)"></label>
+// <script>
+//  function check(input) {
+//    if (input.value == "good" ||
+//        input.value == "fine" ||
+//        input.value == "tired") {
+//      input.setCustomValidity('"' + input.value + '" is not a feeling.');
+//    } else {
+//      // input is fine -- reset the error message
+//      input.setCustomValidity('');
+//    }
+//  }
+// </script> */}
