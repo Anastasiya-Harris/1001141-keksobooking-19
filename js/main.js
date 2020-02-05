@@ -85,7 +85,7 @@ var createAd = function (i) {
 
 // Отрисовывает во фрагменте сгенерированные DOM элементы в блок .map__pin
 var renderPins = function () {
-  var map = document.querySelector('.map');
+  // var map = document.querySelector('.map');
 
   var template = document.querySelector('#pin').content.querySelector('.map__pin');
   var pinListElement = document.querySelector('.map__pins');
@@ -123,39 +123,59 @@ renderPins();
 // 1) Неактивное состояние.
 // .ad-form содержит класс ad-form--disabled
 // Все <input> и <select> формы .ad-form заблокированы с помощью атрибута disabled,
-// добавленного на них или на их родительские блоки fieldset;
 // Форма с фильтрами .map__filters заблокирована так же, как и форма .ad-form;
+
+
+var fieldsets = document.querySelectorAll('fieldset');
 var mapFilters = document.querySelector('.map__filters');
 var adForm = document.querySelector('.ad-form');
+var map = document.querySelector('.map');
 
+var addFormDisabled = function () {
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].setAttribute('disabled', 'disabled');
+  }
+};
+addFormDisabled();
+
+var addMapDisabled = function () {
+  for (var i = 0; i < mapFilters.length; i++) {
+    mapFilters[i].setAttribute('disabled', 'disabled');
+  }
+};
+addMapDisabled();
+
+var removeFormDisabled = function () {
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = false;
+  }
+};
 
 // 2) Переводит страницу в активный режим.
-// Первое взаимодействие с меткой (mousedown) переводит страницу в активное состояние.
-var mapPinMain = document.querySelector('.map__pin--main');
+var removeMapDisabled = function () {
+  for (var i = 0; i < mapFilters.length; i++) {
+    mapFilters[i].disabled = false;
+  }
+};
 
 var onMainPinMousedown = function (evt) {
   if (evt.which === 1) {
     adForm.classList.remove('ad-form--disabled');
+    // mapFaded.classList.remove(.map--faded )
+    map.classList.remove('map--faded');
+    removeFormDisabled();
+    removeMapDisabled();
   }
 };
 
-mapPinMain.addEventListener('mousedown', onMainPinMousedown);
 
-// Функция добавления и удаления атрибута disabled у формы
-
-// var fieldets = document.querySelectorAll('.form__element');
-var fieldsets = document.querySelectorAll('fieldset');
-for (var i = 0; i < fieldsets.length; i++) {
-  fieldsets[i].setAttribute('disabled', 'disabled');
-}
-
-onMainPinMousedown
+// var mapPinMain = document.querySelector('.map__pin--main');
+// mapPinMain.addEventListener('mousedown', onMainPinMousedown);
 
 
+// onMainPinMousedown
 
 
-// mapFilters.setAttribute('disabled', 'disabled'); // не работает
-// fieldets.setAttribute('disabled', 'disabled'); // не работает
 // var onPopupEscPress = function (evt) {
 //   if (evt.key === ESC_KEY) {
 //     closePopup();
