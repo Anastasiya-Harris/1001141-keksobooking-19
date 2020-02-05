@@ -121,9 +121,6 @@ renderPins();
 // Новое задание /////////////////////////////////////////////////////////////////
 
 // 1) Неактивное состояние.
-// .ad-form содержит класс ad-form--disabled
-// Все <input> и <select> формы .ad-form заблокированы с помощью атрибута disabled,
-// Форма с фильтрами .map__filters заблокирована так же, как и форма .ad-form;
 
 
 var fieldsets = document.querySelectorAll('fieldset');
@@ -158,7 +155,10 @@ var removeMapDisabled = function () {
   }
 };
 
+var mapPinMain = document.querySelector('.map__pin--main');
+
 var onMainPinMousedown = function (evt) {
+  mapPinMain.addEventListener('mousedown', onMainPinMousedown);
   if (evt.which === 1) {
     adForm.classList.remove('ad-form--disabled');
     // mapFaded.classList.remove(.map--faded )
@@ -168,8 +168,16 @@ var onMainPinMousedown = function (evt) {
   }
 };
 
+var onMainPinEnter = function (evt) {
+mapPinMain.addEventListener('keydown', function (evt)
+  if (evt.key === 'Enter') {
+    adForm.classList.remove('ad-form--disabled');
+    map.classList.remove('map--faded');
+    removeFormDisabled();
+    removeMapDisabled();
+  }}
+};
 
-// var mapPinMain = document.querySelector('.map__pin--main');
 // mapPinMain.addEventListener('mousedown', onMainPinMousedown);
 
 
