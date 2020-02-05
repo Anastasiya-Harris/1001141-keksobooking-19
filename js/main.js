@@ -127,23 +127,40 @@ renderPins();
 // Форма с фильтрами .map__filters заблокирована так же, как и форма .ad-form;
 var mapFilters = document.querySelector('.map__filters');
 var adForm = document.querySelector('.ad-form');
-var fieldets = document.querySelectorAll('.form__element');
-
-mapFilters.setAttribute('disabled', 'disabled'); // не работает
-fieldets.setAttribute('disabled', 'disabled'); // не работает
 
 
 // 2) Переводит страницу в активный режим.
 // Первое взаимодействие с меткой (mousedown) переводит страницу в активное состояние.
 var mapPinMain = document.querySelector('.map__pin--main');
 
-var mainPinMousedownHandler = function () {
-  adForm.classList.remove('ad-form--disabled');
+var onMainPinMousedown = function (evt) {
+  if (evt.which === 1) {
+    adForm.classList.remove('ad-form--disabled');
+  }
 };
 
-mapPinMain.addEventListener('mousedown', mainPinMousedownHandler);
+mapPinMain.addEventListener('mousedown', onMainPinMousedown);
 
 // Функция добавления и удаления атрибута disabled у формы
+
+// var fieldets = document.querySelectorAll('.form__element');
+var fieldsets = document.querySelectorAll('fieldset');
+for (var i = 0; i < fieldsets.length; i++) {
+  fieldsets[i].setAttribute('disabled', 'disabled');
+}
+
+onMainPinMousedown
+
+
+
+
+// mapFilters.setAttribute('disabled', 'disabled'); // не работает
+// fieldets.setAttribute('disabled', 'disabled'); // не работает
+// var onPopupEscPress = function (evt) {
+//   if (evt.key === ESC_KEY) {
+//     closePopup();
+//   }
+// };
 
 
 // 3) Заполнение поля адреса при mousedown на mapPinMain
@@ -158,12 +175,12 @@ mapPinMain.addEventListener('mousedown', mainPinMousedownHandler);
 // Поле Цена за ночь:
 // Обязательное поле;
 // Числовое поле;
-// Максимальное значение — 1 000 000.
+// Максимальное значение — 1000000.
 // 3.3. Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»:
-// «Бунгало» — минимальная цена за ночь 0;
-// «Квартира» — минимальная цена за ночь 1 000;
-// «Дом» — минимальная цена 5 000;
-// «Дворец» — минимальная цена 10 000.
+// «Бунгало» — минимальная цена за ночь 0; min="0"
+// «Квартира» — минимальная цена за ночь 1 000; min="1000"
+// «Дом» — минимальная цена 5 000; min="5000"
+// «Дворец» — минимальная цена 10 000. min="10000"
 
 // Валидация
 // Второй подход заключается в использовании встроенного API для валидации.
