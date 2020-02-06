@@ -145,7 +145,7 @@ var disactivateMap = function () {
   addMapDisabled();
 };
 
-// файл///////////////////////////////////////////////////////////////
+// отдельный файл///////////////////////////////////////////////////////////////
 // 2) Переводит страницу в активный режим.
 var removeFormDisabled = function () {
   for (var i = 0; i < fieldsets.length; i++) {
@@ -171,30 +171,42 @@ var removeDisabled = function () {
 
 var activateMap = function () {
   removeDisabled();
-  renderPins();
+  renderPins(); // Метки генерируются каждый раз при нажатии на булавку!!
 };
 
 disactivateMap();
 
+var mapPinMain = document.querySelector('.map__pin--main');
+var address = document.querySelector('#address');
+
+
+// Ловит позицию метки и передаёт в инпут адрес
+var setAdress = function (pin) {
+  var x = pin.offsetLeft + PIN_WIDTH / 2;
+  var y = pin.offsetTop + PIN_HEIGHT;
+  address.value = x + ', ' + y;
+};
+
+// setAdress(mapPinMain);
 
 // Активация карты
 var onMainPinMousedown = function (evt) {
   if (evt.which === 1) {
     activateMap();
+    setAdress(mapPinMain);
+    // mapPinMain.removeEventListener('keydown', onKeydownPressed); нужно удалить обработчик
   }
 };
 
 var onKeydownPressed = function (evt) {
   if (evt.key === 'Enter') {
     activateMap();
+    setAdress(mapPinMain);
   }
 };
 
-var mapPinMain = document.querySelector('.map__pin--main');
-mapPinMain.addEventListener('mousedown', onMainPinMousedown);
-mapPinMain.addEventListener('keydown', onKeydownPressed);
 
-
+// отдельный файл///////////////////////////////////////////////////////////////
 // 3) Заполнение поля адреса при mousedown на mapPinMain
 // Формат значения поля адреса: {{x}}, {{y}}, где {{x}} и {{y}} это координаты,
 // на которые метка указывает своим острым концом. Например, если метка .map__pin--main
@@ -203,7 +215,18 @@ mapPinMain.addEventListener('keydown', onKeydownPressed);
 //  Координаты не должны быть дробными.
 
 
-// 5) Валидация
+mapPinMain.addEventListener('mousedown', onMainPinMousedown);
+mapPinMain.addEventListener('keydown', onKeydownPressed);
+
+// var onMainPinMousedown = function (evt) {
+//   if (evt.which === 1) {
+//     activateMap();
+//   }
+// };
+
+
+// отдельный файл///////////////////////////////////////////////////////////////
+// 4) Валидация
 // Поле Цена за ночь:
 // Обязательное поле;
 // Числовое поле;
@@ -233,3 +256,41 @@ mapPinMain.addEventListener('keydown', onKeydownPressed);
 //    }
 //  }
 // </script> */}
+var typeOfHouse = document.querySelector('#type');
+var roomsNumber = document.querySelector('#room_number');
+var buttonSubmit = document.querySelector('ad-form__submit');
+
+var MIN_PRICES = {
+  flat: 1000,
+  bungalo: 0,
+  house: 5000,
+  palace: 10000
+};
+
+
+// var check = function () {
+//   if () {
+
+//   } else  {
+//     roomNumber.setCustomValidity('')
+//   }
+// };
+
+// document.querySelectorAll('option:checked');
+// roomsNumber.options[roomsNumber.selectedIndex].value;
+
+// Если  выбрано roomNumber checked value="1" === typeOfHouse checked value="1"
+// || roomNumber checked value="2" === typeOfHouse checked  value="<=2"
+// || roomNumber checked value="2" === typeOfHouse checked  value="<=2"
+// || roomNumber checked value="3" === typeOfHouse checked  value="<=3" {
+//   button.setapSabmit();
+// } else {
+//   roomNumber.setCustomValidity('')
+// }
+// Пример
+// const selectElement = document.querySelector('.ice-cream');
+
+// selectElement.addEventListener('change', (event) => {
+//   const result = document.querySelector('.result');
+//   result.textContent = `You like ${event.target.value}`;
+// });
