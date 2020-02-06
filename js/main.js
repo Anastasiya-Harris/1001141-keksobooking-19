@@ -85,7 +85,7 @@ var createAd = function (i) {
 
 // Отрисовывает во фрагменте сгенерированные DOM элементы в блок .map__pin
 var renderPins = function () {
-  // var map = document.querySelector('.map');
+  var map = document.querySelector('.map');
 
   var template = document.querySelector('#pin').content.querySelector('.map__pin');
   var pinListElement = document.querySelector('.map__pins');
@@ -113,16 +113,14 @@ var renderPins = function () {
   pinListElement.appendChild(fragment);
 
   // Показывает карту
-  // map.classList.remove('map--faded');
+  map.classList.remove('map--faded');
 };
-renderPins();
+// renderPins();
 
 
 // Новое задание /////////////////////////////////////////////////////////////////
 
 // 1) Неактивное состояние.
-
-
 var fieldsets = document.querySelectorAll('fieldset');
 var mapFilters = document.querySelector('.map__filters');
 var adForm = document.querySelector('.ad-form');
@@ -133,62 +131,68 @@ var addFormDisabled = function () {
     fieldsets[i].setAttribute('disabled', 'disabled');
   }
 };
-addFormDisabled();
 
 var addMapDisabled = function () {
   for (var i = 0; i < mapFilters.length; i++) {
     mapFilters[i].setAttribute('disabled', 'disabled');
   }
 };
-addMapDisabled();
 
+
+// Блокирует формы
+var disactivateMap = function () {
+  addFormDisabled();
+  addMapDisabled();
+};
+
+// файл///////////////////////////////////////////////////////////////
+// 2) Переводит страницу в активный режим.
 var removeFormDisabled = function () {
   for (var i = 0; i < fieldsets.length; i++) {
     fieldsets[i].disabled = false;
   }
 };
 
-// 2) Переводит страницу в активный режим.
+
 var removeMapDisabled = function () {
   for (var i = 0; i < mapFilters.length; i++) {
     mapFilters[i].disabled = false;
   }
 };
 
-var mapPinMain = document.querySelector('.map__pin--main');
 
+var removeDisabled = function () {
+  adForm.classList.remove('ad-form--disabled');
+  map.classList.remove('map--faded');
+  removeFormDisabled();
+  removeMapDisabled();
+};
+
+
+var activateMap = function () {
+  removeDisabled();
+  renderPins();
+};
+
+disactivateMap();
+
+
+// Активация карты
 var onMainPinMousedown = function (evt) {
-  mapPinMain.addEventListener('mousedown', onMainPinMousedown);
   if (evt.which === 1) {
-    adForm.classList.remove('ad-form--disabled');
-    // mapFaded.classList.remove(.map--faded )
-    map.classList.remove('map--faded');
-    removeFormDisabled();
-    removeMapDisabled();
+    activateMap();
   }
 };
 
-var onMainPinEnter = function (evt) {
-mapPinMain.addEventListener('keydown', function (evt)
+var onKeydownPressed = function (evt) {
   if (evt.key === 'Enter') {
-    adForm.classList.remove('ad-form--disabled');
-    map.classList.remove('map--faded');
-    removeFormDisabled();
-    removeMapDisabled();
-  }}
+    activateMap();
+  }
 };
 
-// mapPinMain.addEventListener('mousedown', onMainPinMousedown);
-
-
-// onMainPinMousedown
-
-
-// var onPopupEscPress = function (evt) {
-//   if (evt.key === ESC_KEY) {
-//     closePopup();
-//   }
-// };
+var mapPinMain = document.querySelector('.map__pin--main');
+mapPinMain.addEventListener('mousedown', onMainPinMousedown);
+mapPinMain.addEventListener('keydown', onKeydownPressed);
 
 
 // 3) Заполнение поля адреса при mousedown на mapPinMain
