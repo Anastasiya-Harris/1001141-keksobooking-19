@@ -256,8 +256,11 @@ mapPinMain.addEventListener('keydown', onKeydownPressed);
 //    }
 //  }
 // </script> */}
-var typeOfHouse = document.querySelector('#type');
-var roomsNumber = document.querySelector('#room_number');
+var typeOfHouseSelector = document.querySelector('#type');
+var price = document.querySelector('#price');
+
+var roomsNumberSelector = document.querySelector('#room_number');
+var capacitySelector = document.querySelector('#capacity');
 var buttonSubmit = document.querySelector('ad-form__submit');
 
 var MIN_PRICES = {
@@ -267,10 +270,26 @@ var MIN_PRICES = {
   palace: 10000
 };
 
+var TYPE_OF_HOUSE = ['bungalo', 'flat', 'house', 'palace'];
 
-// var check = function () {
-//   if () {
+var setMinPrice = function () {
+  // if (TYPE_OF_HOUSE[bungalo])
+  if (TYPE_OF_HOUSE[MIN_PRICES.name]) {
+    typeOfHouseSelector.setAttribute('min', 'MIN_PRICES.name');
+  }
+};
+document.getElementById("typeOfHouseSelector").onchange = function () {
+  price.setAttribute("min", this.value);
+};
+// var checkRoomNumber = function () {
+//   if (roomsNumber.value === 1) {
+//     if (capacity.value != 1) {
+//     capacity.value.setAttribute('disabled', 'disabled');
+//   }
 
+//     // for (var i = 0; i < fieldsets.length; i++) {
+//     //   fieldsets[i].setAttribute('disabled', 'disabled');
+//     }
 //   } else  {
 //     roomNumber.setCustomValidity('')
 //   }
@@ -287,6 +306,8 @@ var MIN_PRICES = {
 // } else {
 //   roomNumber.setCustomValidity('')
 // }
+
+
 // Пример
 // const selectElement = document.querySelector('.ice-cream');
 
@@ -294,3 +315,48 @@ var MIN_PRICES = {
 //   const result = document.querySelector('.result');
 //   result.textContent = `You like ${event.target.value}`;
 // });
+
+// Метод setCustomValidity()
+// function checkPasscode() {
+// 	var passcode_input = document.querySelector("#passcode");
+
+// 	if (passcode_input.value != "Ivy") {
+// 		passcode_input.setCustomValidity("Wrong. It's 'Ivy'.");
+// 	} else {
+// 		passcode_input.setCustomValidity(""); // be sure to leave this empty!
+// 		alert("Correct!");
+// 	}
+// }
+
+// price.addEventListener('input', function () {
+//   checkPriceValidity();
+// });
+
+// function checkPriceValidity() {
+//   var validity = price.validity;
+//   if (validity.rangeUnderflow) {
+//     price.setCustomValidity('Цена должна быть не меньше ' + minPrice[type.options[type.selectedIndex].value] + ' руб.');
+//   } else if (validity.rangeOverflow) {
+//     price.setCustomValidity('Цена должна быть не больше 1 000 000 руб.');
+//   } else if (validity.valueMissing) {
+//     price.setCustomValidity('Обязательное поле');
+//   } else {
+//     price.setCustomValidity('');
+//     name1. style. background=’#FFFFFF’;
+//   }
+// }
+
+// <select id="select" multiple>
+//   <option value="blues" selected>Блюз</option>
+//   <option value="rock" selected>Рок</option>
+//   <option value="classic">Классика</option>
+// </select>
+
+// <script>
+//   // получаем все выбранные значения из select с multiple
+//   let selected = Array.from(select.options)
+//     .filter(option => option.selected)
+//     .map(option => option.value);
+
+//   alert(selected); // Блюз,Рок
+// </script>
