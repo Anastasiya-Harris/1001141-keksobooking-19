@@ -346,17 +346,9 @@ document.getElementById("typeOfHouseSelector").onchange = function () {
 //   }
 // }
 
-// <select id="select" multiple>
-//   <option value="blues" selected>Блюз</option>
-//   <option value="rock" selected>Рок</option>
-//   <option value="classic">Классика</option>
-// </select>
+var selected = typeOfHouseSelector.from(select.options)
+    .filter(option => option.selected)
+    .map(option => option.value);
 
-// <script>
-//   // получаем все выбранные значения из select с multiple
-//   let selected = Array.from(select.options)
-//     .filter(option => option.selected)
-//     .map(option => option.value);
-
-//   alert(selected); // Блюз,Рок
-// </script>
+return(selected);
+selected.price.setAttribute("min", this.value);
