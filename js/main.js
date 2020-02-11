@@ -115,7 +115,6 @@ var renderPins = function () {
   // Показывает карту
   map.classList.remove('map--faded');
 };
-// renderPins();
 
 
 // Новое задание /////////////////////////////////////////////////////////////////
@@ -177,14 +176,20 @@ var activateMap = function () {
 disactivateMap();
 
 var mapPinMain = document.querySelector('.map__pin--main');
-var address = document.querySelector('#address');
+var addressInput = document.querySelector('#address');
 
+// 3) Заполнение поля адреса при mousedown на mapPinMain
+// Формат значения поля адреса: {{x}}, {{y}}, где {{x}} и {{y}} это координаты,
+// на которые метка указывает своим острым концом. Например, если метка .map__pin--main
+// имеет CSS-координаты top: 200px; left: 300px, то в поле адрес должно быть записано
+// значение 300 + расстояние до острого конца по горизонтали, 200 + расстояние до острого конца по вертикали.
+//  Координаты не должны быть дробными.
 
 // Ловит позицию метки и передаёт в инпут адрес
 var setAdress = function (pin) {
   var x = pin.offsetLeft + PIN_WIDTH / 2;
   var y = pin.offsetTop + PIN_HEIGHT;
-  address.value = x + ', ' + y;
+  addressInput.value = x + ', ' + y;
 };
 
 // setAdress(mapPinMain);
@@ -205,64 +210,15 @@ var onKeydownPressed = function (evt) {
   }
 };
 
-
-// отдельный файл///////////////////////////////////////////////////////////////
-// 3) Заполнение поля адреса при mousedown на mapPinMain
-// Формат значения поля адреса: {{x}}, {{y}}, где {{x}} и {{y}} это координаты,
-// на которые метка указывает своим острым концом. Например, если метка .map__pin--main
-// имеет CSS-координаты top: 200px; left: 300px, то в поле адрес должно быть записано
-// значение 300 + расстояние до острого конца по горизонтали, 200 + расстояние до острого конца по вертикали.
-//  Координаты не должны быть дробными.
-
-
 mapPinMain.addEventListener('mousedown', onMainPinMousedown);
 mapPinMain.addEventListener('keydown', onKeydownPressed);
 
-// var onMainPinMousedown = function (evt) {
-//   if (evt.which === 1) {
-//     activateMap();
-//   }
-// };
-
 
 // отдельный файл///////////////////////////////////////////////////////////////
-// 4) Валидация
-// Поле Цена за ночь:
-// Обязательное поле;
-// Числовое поле;
-// Максимальное значение — 1000000.
-// 3.3. Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»:
-// «Бунгало» — минимальная цена за ночь 0; min="0"
-// «Квартира» — минимальная цена за ночь 1 000; min="1000"
-// «Дом» — минимальная цена 5 000; min="5000"
-// «Дворец» — минимальная цена 10 000. min="10000"
 
-// Валидация
-// Второй подход заключается в использовании встроенного API для валидации.
-// Вы пишите код проверки соответствия и если выбранное количество гостей не
-// подходит под количество комнат, вызываете метод setCustomValidity.
-// selectElt.setCustomValidity(string);
-
-// {/* <label>Feeling: <input name=f type="text" oninput="check(this)"></label>
-// <script>
-//  function check(input) {
-//    if (input.value == "good" ||
-//        input.value == "fine" ||
-//        input.value == "tired") {
-//      input.setCustomValidity('"' + input.value + '" is not a feeling.');
-//    } else {
-//      // input is fine -- reset the error message
-//      input.setCustomValidity('');
-//    }
-//  }
-// </script> */}
+// 4) Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»:
 var typeOfHouseSelector = document.querySelector('#type');
 var priceInput = document.querySelector('#price');
-
-var roomsNumberSelector = document.querySelector('#room_number');
-var capacitySelector = document.querySelector('#capacity');
-var buttonSubmit = document.querySelector('ad-form__submit');
-
 var MIN_PRICES = {
   flat: 1000,
   bungalo: 0,
@@ -270,17 +226,26 @@ var MIN_PRICES = {
   palace: 10000
 };
 
-var TYPE_OF_HOUSE = ['bungalo', 'flat', 'house', 'palace'];
+var onTypeOfHouseSelectorChange = function () {
+  var selected = Array.from(typeOfHouseSelector.options)
+    .filter(function (option) {
+      return option.selected;
+    });
+  var houseType = selected[0].value;
+  setMinPrice(houseType);
+};
 
-// var setMinPrice = function () {
-//   // if (TYPE_OF_HOUSE[bungalo])
-//   if (TYPE_OF_HOUSE[MIN_PRICES.name]) {
-//     typeOfHouseSelector.setAttribute('min', 'MIN_PRICES.name');
-//   }
-// };
-// document.getElementById("typeOfHouseSelector").onchange = function () {
-//   price.setAttribute("min", this.value);
-// };
+var setMinPrice = function (houseType) {
+  priceInput.setAttribute('min', MIN_PRICES[houseType]);
+  priceInput.setAttribute('placeholder', MIN_PRICES[houseType]);
+};
+
+typeOfHouseSelector.addEventListener('change', onTypeOfHouseSelectorChange);
+
+//  5) Установка соответствия количества гостей (спальных мест) с количеством комнат.
+var roomsNumberSelector = document.querySelector('#room_number');
+var capacitySelector = document.querySelector('#capacity');
+var buttonSubmit = document.querySelector('ad-form__submit');
 
 
 // var checkRoomNumber = function () {
@@ -310,13 +275,26 @@ var TYPE_OF_HOUSE = ['bungalo', 'flat', 'house', 'palace'];
 // }
 
 
-// Пример
-// const selectElement = document.querySelector('.ice-cream');
+// 6) Валидация
+// Второй подход заключается в использовании встроенного API для валидации.
+// Вы пишите код проверки соответствия и если выбранное количество гостей не
+// подходит под количество комнат, вызываете метод setCustomValidity.
+// selectElt.setCustomValidity(string);
 
-// selectElement.addEventListener('change', (event) => {
-//   const result = document.querySelector('.result');
-//   result.textContent = `You like ${event.target.value}`;
-// });
+// {/* <label>Feeling: <input name=f type="text" oninput="check(this)"></label>
+// <script>
+//  function check(input) {
+//    if (input.value == "good" ||
+//        input.value == "fine" ||
+//        input.value == "tired") {
+//      input.setCustomValidity('"' + input.value + '" is not a feeling.');
+//    } else {
+//      // input is fine -- reset the error message
+//      input.setCustomValidity('');
+//    }
+//  }
+// </script> */}
+
 
 // Метод setCustomValidity()
 // function checkPasscode() {
@@ -347,26 +325,3 @@ var TYPE_OF_HOUSE = ['bungalo', 'flat', 'house', 'palace'];
 //     name1. style. background=’#FFFFFF’;
 //   }
 // }
-
-// Для ES6
-// var selected = typeOfHouseSelector.from(select.options)
-//     .filter(option => option.selected)
-//     .map(option => option.value);
-
-// return(selected);
-
-var onTypeOfHouseSelectorChange = function () {
-  var selected = Array.from(typeOfHouseSelector.options)
-    .filter(function (option) {
-      return option.selected;
-    });
-  var houseType = selected[0].value;
-  setMinPrice(houseType);
-};
-
-var setMinPrice = function (houseType) {
-  priceInput.setAttribute('min', MIN_PRICES[houseType]);
-  priceInput.setAttribute('placeholder', MIN_PRICES[houseType]);
-};
-
-typeOfHouseSelector.addEventListener('change', onTypeOfHouseSelectorChange);
