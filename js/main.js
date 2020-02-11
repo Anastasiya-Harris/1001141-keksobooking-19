@@ -137,11 +137,14 @@ var addMapDisabled = function () {
   }
 };
 
+var mapPinMain = document.querySelector('.map__pin--main');
+var addressInput = document.querySelector('#address');
 
 // Блокирует формы
 var disactivateMap = function () {
   addFormDisabled();
   addMapDisabled();
+  setInitialAddress(mapPinMain);
 };
 
 // отдельный файл///////////////////////////////////////////////////////////////
@@ -151,7 +154,6 @@ var removeFormDisabled = function () {
     fieldsets[i].disabled = false;
   }
 };
-
 
 var removeMapDisabled = function () {
   for (var i = 0; i < mapFilters.length; i++) {
@@ -170,48 +172,42 @@ var removeDisabled = function () {
 
 var activateMap = function () {
   removeDisabled();
-  renderPins(); // Метки генерируются каждый раз при нажатии на булавку!!
+  renderPins();
 };
 
 disactivateMap();
-
-var mapPinMain = document.querySelector('.map__pin--main');
-var addressInput = document.querySelector('#address');
 
 // 3) Заполнение поля адреса при mousedown на mapPinMain
 // Формат значения поля адреса: {{x}}, {{y}}, где {{x}} и {{y}} это координаты,
 // на которые метка указывает своим острым концом. Например, если метка .map__pin--main
 // имеет CSS-координаты top: 200px; left: 300px, то в поле адрес должно быть записано
 // значение 300 + расстояние до острого конца по горизонтали, 200 + расстояние до острого конца по вертикали.
-//  Координаты не должны быть дробными.
+// Координаты не должны быть дробными.
+
+
+function updateAddress(x, y) {
+  addressInput.value = x + ', ' + y;
+}
 
 // Ловит позицию метки и передаёт в инпут адрес
-var setAdress = function (pin) {
+function setInitialAddress(pin) {
   var x = pin.offsetLeft + PIN_WIDTH / 2;
   var y = pin.offsetTop + PIN_HEIGHT;
-  addressInput.value = x + ', ' + y;
-};
+  updateAddress(x, y);
+}
 
 // setAdress(mapPinMain);
 
 // Активация карты
 var onMainPinMousedown = function (evt) {
-  if (evt.which === 1) {
+  if (evt.button === 0) {
     activateMap();
-    setAdress(mapPinMain);
-    // mapPinMain.removeEventListener('keydown', onKeydownPressed); нужно удалить обработчик
+    setInitialAddress(mapPinMain);
+    mapPinMain.removeEventListener('click', onMainPinMousedown);
   }
 };
 
-var onKeydownPressed = function (evt) {
-  if (evt.key === 'Enter') {
-    activateMap();
-    setAdress(mapPinMain);
-  }
-};
-
-mapPinMain.addEventListener('mousedown', onMainPinMousedown);
-mapPinMain.addEventListener('keydown', onKeydownPressed);
+mapPinMain.addEventListener('click', onMainPinMousedown, {once: true});
 
 
 // отдельный файл///////////////////////////////////////////////////////////////
@@ -245,35 +241,22 @@ typeOfHouseSelector.addEventListener('change', onTypeOfHouseSelectorChange);
 //  5) Установка соответствия количества гостей (спальных мест) с количеством комнат.
 var roomsNumberSelector = document.querySelector('#room_number');
 var capacitySelector = document.querySelector('#capacity');
-var buttonSubmit = document.querySelector('ad-form__submit');
+var buttonSubmit = document.querySelector('.ad-form__submit');
+
+function validateRoomNumbers() {
+  var roomsNumber = validateRoomNumbers.value;
+  var capacity = capacitySelector.value;
 
 
-// var checkRoomNumber = function () {
-//   if (roomsNumber.value === 1) {
-//     if (capacity.value != 1) {
-//     capacity.value.setAttribute('disabled', 'disabled');
-//   }
+  if (roomsNumber === '100' && capacity !== '0') {
+    roomsNumberSelector.setCustomValidity('Не для гостей');
+  } else if (roomsNumber < capacity) {
+    roomsNumberSelector.setCustomValidity('Количество комнат не может быть меньше количества гостей');
+  }
+}
 
-//     // for (var i = 0; i < fieldsets.length; i++) {
-//     //   fieldsets[i].setAttribute('disabled', 'disabled');
-//     }
-//   } else  {
-//     roomNumber.setCustomValidity('')
-//   }
-// };
-
-// document.querySelectorAll('option:checked');
-// roomsNumber.options[roomsNumber.selectedIndex].value;
-
-// Если  выбрано roomNumber checked value="1" === typeOfHouse checked value="1"
-// || roomNumber checked value="2" === typeOfHouse checked  value="<=2"
-// || roomNumber checked value="2" === typeOfHouse checked  value="<=2"
-// || roomNumber checked value="3" === typeOfHouse checked  value="<=3" {
-//   button.setapSabmit();
-// } else {
-//   roomNumber.setCustomValidity('')
-// }
-
+roomsNumberSelector.addEventListener('change', validateRoomNumbers);
+capacitySelector.addEventListener('change', validateRoomNumbers);
 
 // 6) Валидация
 // Второй подход заключается в использовании встроенного API для валидации.
