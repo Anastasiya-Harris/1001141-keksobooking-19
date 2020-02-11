@@ -257,7 +257,7 @@ mapPinMain.addEventListener('keydown', onKeydownPressed);
 //  }
 // </script> */}
 var typeOfHouseSelector = document.querySelector('#type');
-var price = document.querySelector('#price');
+var priceInput = document.querySelector('#price');
 
 var roomsNumberSelector = document.querySelector('#room_number');
 var capacitySelector = document.querySelector('#capacity');
@@ -272,15 +272,17 @@ var MIN_PRICES = {
 
 var TYPE_OF_HOUSE = ['bungalo', 'flat', 'house', 'palace'];
 
-var setMinPrice = function () {
-  // if (TYPE_OF_HOUSE[bungalo])
-  if (TYPE_OF_HOUSE[MIN_PRICES.name]) {
-    typeOfHouseSelector.setAttribute('min', 'MIN_PRICES.name');
-  }
-};
-document.getElementById("typeOfHouseSelector").onchange = function () {
-  price.setAttribute("min", this.value);
-};
+// var setMinPrice = function () {
+//   // if (TYPE_OF_HOUSE[bungalo])
+//   if (TYPE_OF_HOUSE[MIN_PRICES.name]) {
+//     typeOfHouseSelector.setAttribute('min', 'MIN_PRICES.name');
+//   }
+// };
+// document.getElementById("typeOfHouseSelector").onchange = function () {
+//   price.setAttribute("min", this.value);
+// };
+
+
 // var checkRoomNumber = function () {
 //   if (roomsNumber.value === 1) {
 //     if (capacity.value != 1) {
@@ -346,9 +348,25 @@ document.getElementById("typeOfHouseSelector").onchange = function () {
 //   }
 // }
 
-var selected = typeOfHouseSelector.from(select.options)
-    .filter(option => option.selected)
-    .map(option => option.value);
+// Для ES6
+// var selected = typeOfHouseSelector.from(select.options)
+//     .filter(option => option.selected)
+//     .map(option => option.value);
 
-return(selected);
-selected.price.setAttribute("min", this.value);
+// return(selected);
+
+var onTypeOfHouseSelectorChange = function () {
+  var selected = Array.from(typeOfHouseSelector.options)
+    .filter(function (option) {
+      return option.selected;
+    });
+  var houseType = selected[0].value;
+  setMinPrice(houseType);
+};
+
+var setMinPrice = function (houseType) {
+  priceInput.setAttribute('min', MIN_PRICES[houseType]);
+  priceInput.setAttribute('placeholder', MIN_PRICES[houseType]);
+};
+
+typeOfHouseSelector.addEventListener('change', onTypeOfHouseSelectorChange);
