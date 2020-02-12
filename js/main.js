@@ -90,10 +90,10 @@ var renderPins = function () {
   var template = document.querySelector('#pin').content.querySelector('.map__pin');
   var pinListElement = document.querySelector('.map__pins');
 
-  // создаём фрагмент куда будем записывать объявления
+  // Создаём фрагмент куда будем записывать объявления
   var fragment = document.createDocumentFragment();
 
-  // копируем по ссылке массив объявлений
+  // Копируем по ссылке массив объявлений
   var ads = getAdsArray();
 
   // Клонируем темплейт объявления
@@ -108,6 +108,9 @@ var renderPins = function () {
     // Записываем объявления во фрагмент
     fragment.appendChild(pinElement);
   }
+
+  // pinElement.style.left = (ad.location.x - MAIN_PIN_WIDTH / 2) + 'px';
+  // pinElement.style.top = (ad.location.y - MAIN_PIN_HEIGHT / 2) + 'px';
 
   // Вставляем фрагмент в .map__pins
   pinListElement.appendChild(fragment);
@@ -161,7 +164,6 @@ var removeMapDisabled = function () {
   }
 };
 
-
 var removeDisabled = function () {
   adForm.classList.remove('ad-form--disabled');
   map.classList.remove('map--faded');
@@ -196,7 +198,6 @@ function setInitialAddress(pin) {
   updateAddress(x, y);
 }
 
-// setAdress(mapPinMain);
 
 // Активация карты
 var onMainPinMousedown = function (evt) {
@@ -238,46 +239,30 @@ var setMinPrice = function (houseType) {
 
 typeOfHouseSelector.addEventListener('change', onTypeOfHouseSelectorChange);
 
-//  5) Установка соответствия количества гостей (спальных мест) с количеством комнат.
+//  5) Валидация. Установка соответствия количества гостей (спальных мест) с количеством комнат.
 var roomsNumberSelector = document.querySelector('#room_number');
 var capacitySelector = document.querySelector('#capacity');
-var buttonSubmit = document.querySelector('.ad-form__submit');
+
 
 function validateRoomNumbers() {
-  var roomsNumber = validateRoomNumbers.value;
+  var roomsNumber = roomsNumberSelector.value;
   var capacity = capacitySelector.value;
-
 
   if (roomsNumber === '100' && capacity !== '0') {
     roomsNumberSelector.setCustomValidity('Не для гостей');
   } else if (roomsNumber < capacity) {
     roomsNumberSelector.setCustomValidity('Количество комнат не может быть меньше количества гостей');
+  } else {
+    // input is fine -- reset the error message
+    roomsNumberSelector.setCustomValidity('');
   }
 }
 
 roomsNumberSelector.addEventListener('change', validateRoomNumbers);
 capacitySelector.addEventListener('change', validateRoomNumbers);
 
-// 6) Валидация
-// Второй подход заключается в использовании встроенного API для валидации.
-// Вы пишите код проверки соответствия и если выбранное количество гостей не
-// подходит под количество комнат, вызываете метод setCustomValidity.
-// selectElt.setCustomValidity(string);
 
-// {/* <label>Feeling: <input name=f type="text" oninput="check(this)"></label>
-// <script>
-//  function check(input) {
-//    if (input.value == "good" ||
-//        input.value == "fine" ||
-//        input.value == "tired") {
-//      input.setCustomValidity('"' + input.value + '" is not a feeling.');
-//    } else {
-//      // input is fine -- reset the error message
-//      input.setCustomValidity('');
-//    }
-//  }
-// </script> */}
-
+// var buttonSubmit = document.querySelector('.ad-form__submit');
 
 // Метод setCustomValidity()
 // function checkPasscode() {
