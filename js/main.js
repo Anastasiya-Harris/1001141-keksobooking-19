@@ -144,7 +144,7 @@ var addressInput = document.querySelector('#address');
 var disactivateMap = function () {
   addFormDisabled();
   addMapDisabled();
-  setCurrentAddress(mapPinMain);
+  setInitialAddress(mapPinMain);
 };
 
 // отдельный файл///////////////////////////////////////////////////////////////
@@ -200,7 +200,7 @@ function setCurrentAddress(pin) {
 var onMainPinMousedown = function (evt) {
   if (evt.button === 0) {
     activateMap();
-    setInitialAddress(mapPinMain);
+    setCurrentAddress(mapPinMain);
     mapPinMain.removeEventListener('click', onMainPinMousedown);
   }
 };
