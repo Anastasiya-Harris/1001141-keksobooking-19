@@ -178,13 +178,6 @@ var activateMap = function () {
 disactivateMap();
 
 // 3) Заполнение поля адреса при mousedown на mapPinMain
-// Формат значения поля адреса: {{x}}, {{y}}, где {{x}} и {{y}} это координаты,
-// на которые метка указывает своим острым концом. Например, если метка .map__pin--main
-// имеет CSS-координаты top: 200px; left: 300px, то в поле адрес должно быть записано
-// значение 300 + расстояние до острого конца по горизонтали, 200 + расстояние до острого конца по вертикали.
-// Координаты не должны быть дробными.
-
-
 function updateAddress(x, y) {
   addressInput.value = x + ', ' + y;
 }
@@ -262,54 +255,3 @@ function validateRoomNumbers() {
 
 roomsNumberSelector.addEventListener('change', validateRoomNumbers);
 capacitySelector.addEventListener('change', validateRoomNumbers);
-
-// 6) Валидация
-// Второй подход заключается в использовании встроенного API для валидации.
-// Вы пишите код проверки соответствия и если выбранное количество гостей не
-// подходит под количество комнат, вызываете метод setCustomValidity.
-// selectElt.setCustomValidity(string);
-
-// {/* <label>Feeling: <input name=f type="text" oninput="check(this)"></label>
-// <script>
-//  function check(input) {
-//    if (input.value == "good" ||
-//        input.value == "fine" ||
-//        input.value == "tired") {
-//      input.setCustomValidity('"' + input.value + '" is not a feeling.');
-//    } else {
-//      // input is fine -- reset the error message
-//      input.setCustomValidity('');
-//    }
-//  }
-// </script> */}
-
-
-// Метод setCustomValidity()
-// function checkPasscode() {
-// 	var passcode_input = document.querySelector("#passcode");
-
-// 	if (passcode_input.value != "Ivy") {
-// 		passcode_input.setCustomValidity("Wrong. It's 'Ivy'.");
-// 	} else {
-// 		passcode_input.setCustomValidity(""); // be sure to leave this empty!
-// 		alert("Correct!");
-// 	}
-// }
-
-// price.addEventListener('input', function () {
-//   checkPriceValidity();
-// });
-
-// function checkPriceValidity() {
-//   var validity = price.validity;
-//   if (validity.rangeUnderflow) {
-//     price.setCustomValidity('Цена должна быть не меньше ' + minPrice[type.options[type.selectedIndex].value] + ' руб.');
-//   } else if (validity.rangeOverflow) {
-//     price.setCustomValidity('Цена должна быть не больше 1 000 000 руб.');
-//   } else if (validity.valueMissing) {
-//     price.setCustomValidity('Обязательное поле');
-//   } else {
-//     price.setCustomValidity('');
-//     name1. style. background=’#FFFFFF’;
-//   }
-// }
