@@ -144,7 +144,7 @@ var addressInput = document.querySelector('#address');
 var disactivateMap = function () {
   addFormDisabled();
   addMapDisabled();
-  setInitialAddress(mapPinMain);
+  setCurrentAddress(mapPinMain);
 };
 
 // отдельный файл///////////////////////////////////////////////////////////////
@@ -195,8 +195,13 @@ function setInitialAddress(pin) {
   var y = pin.offsetTop + PIN_HEIGHT;
   updateAddress(x, y);
 }
+// Координаты дефолтной метки по указателю
+function setCurrentAddress(pin) {
+  var x = pin.offsetLeft + MAIN_PIN_WIDTH / 2;
+  var y = pin.offsetTop + MAIN_PIN_HEIGHT / 2;
+  updateAddress(x, y);
+}
 
-// setAdress(mapPinMain);
 
 // Активация карты
 var onMainPinMousedown = function (evt) {
@@ -241,10 +246,10 @@ typeOfHouseSelector.addEventListener('change', onTypeOfHouseSelectorChange);
 //  5) Установка соответствия количества гостей (спальных мест) с количеством комнат.
 var roomsNumberSelector = document.querySelector('#room_number');
 var capacitySelector = document.querySelector('#capacity');
-var buttonSubmit = document.querySelector('.ad-form__submit');
+// var buttonSubmit = document.querySelector('.ad-form__submit');
 
 function validateRoomNumbers() {
-  var roomsNumber = validateRoomNumbers.value;
+  var roomsNumber = roomsNumberSelector.value;
   var capacity = capacitySelector.value;
 
 
