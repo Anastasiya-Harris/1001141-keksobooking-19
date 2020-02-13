@@ -6,8 +6,8 @@ var CHECKINS = ['12:00', '13:00', '14:00'];
 var CHECKOUTS = ['12:00', '13:00', '14:00'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
-var MAX_PRICE = 1000;
-var MIN_PRICE = 100000;
+var MAX_PRICE = 1000000;
+var MIN_PRICE = 0;
 
 var MIN_MAP_HIGHT = 130;
 var MAX_MAP_HIGHT = 630;
@@ -18,12 +18,14 @@ var MAX_ARRAY_LENGTH_OF_PINS = 8;
 var PIN_HEIGHT = 50;
 var PIN_WIDTH = 70;
 
+var MAIN_PIN_HEIGHT = 156;
+var MAIN_PIN_WIDTH = 156;
+
 
 // Возвращает рандомное число в диапазоне между параметрами min и max включительно.
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
-
 
 // Возвращает один рандомный элемент из переданного массива.
 var getRandomFromArray = function (array) {
@@ -31,13 +33,11 @@ var getRandomFromArray = function (array) {
   return array[randomIndex];
 };
 
-
 // Возвращает массив случайной длинны от 1 до длинны массива включительно.
 var getRandomArrayFromArray = function (array) {
   var maxLength = getRandomNumber(1, array.length + 1);
   return array.slice(0, maxLength);
 };
-
 
 // Создаёт массив переданной длинны из объекта объявления.
 var getAdsArray = function () {
@@ -87,10 +87,10 @@ var renderPins = function () {
   var template = document.querySelector('#pin').content.querySelector('.map__pin');
   var pinListElement = document.querySelector('.map__pins');
 
-  // создаём фрагмент куда будем записывать объявления
+  // Создаём фрагмент куда будем записывать объявления
   var fragment = document.createDocumentFragment();
 
-  // копируем по ссылке массив объявлений
+  // Копируем по ссылке массив объявлений
   var ads = getAdsArray();
 
   // Клонируем темплейт объявления
@@ -106,10 +106,155 @@ var renderPins = function () {
     fragment.appendChild(pinElement);
   }
 
+  // pinElement.style.left = (ad.location.x - MAIN_PIN_WIDTH / 2) + 'px';
+  // pinElement.style.top = (ad.location.y - MAIN_PIN_HEIGHT / 2) + 'px';
+
   // Вставляем фрагмент в .map__pins
   pinListElement.appendChild(fragment);
 
   // Показывает карту
   map.classList.remove('map--faded');
 };
-renderPins();
+
+
+// Новое задание /////////////////////////////////////////////////////////////////
+
+// 1) Неактивное состояние.
+var fieldsets = document.querySelectorAll('fieldset');
+var mapFilters = document.querySelector('.map__filters');
+var adForm = document.querySelector('.ad-form');
+var map = document.querySelector('.map');
+
+var addFormDisabled = function () {
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].setAttribute('disabled', 'disabled');
+  }
+};
+
+var addMapDisabled = function () {
+  for (var i = 0; i < mapFilters.length; i++) {
+    mapFilters[i].setAttribute('disabled', 'disabled');
+  }
+};
+
+var mapPinMain = document.querySelector('.map__pin--main');
+var addressInput = document.querySelector('#address');
+
+// Блокирует формы
+var disactivateMap = function () {
+  addFormDisabled();
+  addMapDisabled();
+  setInitialAddress(mapPinMain);
+};
+
+// отдельный файл///////////////////////////////////////////////////////////////
+// 2) Переводит страницу в активный режим.
+var removeFormDisabled = function () {
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = false;
+  }
+};
+
+var removeMapDisabled = function () {
+  for (var i = 0; i < mapFilters.length; i++) {
+    mapFilters[i].disabled = false;
+  }
+};
+
+var removeDisabled = function () {
+  adForm.classList.remove('ad-form--disabled');
+  map.classList.remove('map--faded');
+  removeFormDisabled();
+  removeMapDisabled();
+};
+
+var activateMap = function () {
+  removeDisabled();
+  renderPins();
+};
+
+disactivateMap();
+
+// 3) Заполнение поля адреса при mousedown на mapPinMain
+function updateAddress(x, y) {
+  addressInput.value = x + ', ' + y;
+}
+
+// Ловит позицию метки и передаёт в инпут адрес
+function setInitialAddress(pin) {
+  var x = pin.offsetLeft + PIN_WIDTH / 2;
+  var y = pin.offsetTop + PIN_HEIGHT;
+  updateAddress(x, y);
+}
+
+// Координаты дефолтной метки по указателю
+function setCurrentAddress(pin) {
+  var x = pin.offsetLeft + MAIN_PIN_WIDTH / 2;
+  var y = pin.offsetTop + MAIN_PIN_HEIGHT / 2;
+  updateAddress(x, y);
+}
+
+
+// Активация карты
+var onMainPinMousedown = function (evt) {
+  if (evt.button === 0) {
+    activateMap();
+    setCurrentAddress(mapPinMain);
+  }
+};
+// Третий аргумент говорит что событие должно произойти 1 раз, затем обработкик удалится
+mapPinMain.addEventListener('click', onMainPinMousedown, {once: true});
+
+
+// отдельный файл//////////////////////////////////////////////////////////////////////////////
+// 4) Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»:
+var typeOfHouseSelector = document.querySelector('#type');
+var priceInput = document.querySelector('#price');
+var MIN_PRICES = {
+  flat: 1000,
+  bungalo: 0,
+  house: 5000,
+  palace: 10000
+};
+
+// Возвращает selected option, вызывает функцию установки мин. цены
+var onTypeOfHouseSelectorChange = function () {
+  var selected = Array.from(typeOfHouseSelector.options)
+    .filter(function (option) {
+      return option.selected;
+    });
+  var houseType = selected[0].value;
+  setMinPrice(houseType);
+};
+
+// Функция установки мин. цены
+var setMinPrice = function (houseType) {
+  priceInput.setAttribute('min', MIN_PRICES[houseType]);
+  priceInput.setAttribute('placeholder', MIN_PRICES[houseType]);
+};
+
+typeOfHouseSelector.addEventListener('change', onTypeOfHouseSelectorChange);
+
+//  5) Валидация. Установка соответствия количества гостей (спальных мест) с количеством комнат.
+var roomsNumberSelector = document.querySelector('#room_number');
+var capacitySelector = document.querySelector('#capacity');
+// var buttonSubmit = document.querySelector('.ad-form__submit');
+
+function validateRoomNumbers() {
+  var roomsNumber = roomsNumberSelector.value;
+  var capacity = capacitySelector.value;
+
+  if (roomsNumber === '100' && capacity !== '0') {
+    roomsNumberSelector.setCustomValidity('Не для гостей');
+  } else if (roomsNumber !== '100' && capacity === '0') {
+    roomsNumberSelector.setCustomValidity('Не для гостей подходит только вариант "100 комнат"');
+  } else if (roomsNumber < capacity) {
+    roomsNumberSelector.setCustomValidity('Количество комнат не может быть меньше количества гостей');
+  } else {
+    // input is fine -- reset the error message
+    roomsNumberSelector.setCustomValidity('');
+  }
+}
+
+roomsNumberSelector.addEventListener('change', validateRoomNumbers);
+capacitySelector.addEventListener('change', validateRoomNumbers);
