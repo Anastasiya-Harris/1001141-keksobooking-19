@@ -6,8 +6,8 @@ var CHECKINS = ['12:00', '13:00', '14:00'];
 var CHECKOUTS = ['12:00', '13:00', '14:00'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
-var MAX_PRICE = 0;
-var MIN_PRICE = 1000000;
+var MAX_PRICE = 1000000;
+var MIN_PRICE = 0;
 
 var MIN_MAP_HIGHT = 130;
 var MAX_MAP_HIGHT = 630;
@@ -27,20 +27,17 @@ var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-
 // Возвращает один рандомный элемент из переданного массива.
 var getRandomFromArray = function (array) {
   var randomIndex = getRandomNumber(0, array.length - 1);
   return array[randomIndex];
 };
 
-
 // Возвращает массив случайной длинны от 1 до длинны массива включительно.
 var getRandomArrayFromArray = function (array) {
   var maxLength = getRandomNumber(1, array.length + 1);
   return array.slice(0, maxLength);
 };
-
 
 // Создаёт массив переданной длинны из объекта объявления.
 var getAdsArray = function () {
@@ -171,7 +168,6 @@ var removeDisabled = function () {
   removeMapDisabled();
 };
 
-
 var activateMap = function () {
   removeDisabled();
   renderPins();
@@ -180,13 +176,6 @@ var activateMap = function () {
 disactivateMap();
 
 // 3) Заполнение поля адреса при mousedown на mapPinMain
-// Формат значения поля адреса: {{x}}, {{y}}, где {{x}} и {{y}} это координаты,
-// на которые метка указывает своим острым концом. Например, если метка .map__pin--main
-// имеет CSS-координаты top: 200px; left: 300px, то в поле адрес должно быть записано
-// значение 300 + расстояние до острого конца по горизонтали, 200 + расстояние до острого конца по вертикали.
-// Координаты не должны быть дробными.
-
-
 function updateAddress(x, y) {
   addressInput.value = x + ', ' + y;
 }
@@ -198,21 +187,26 @@ function setInitialAddress(pin) {
   updateAddress(x, y);
 }
 
+// Координаты дефолтной метки по указателю
+function setCurrentAddress(pin) {
+  var x = pin.offsetLeft + MAIN_PIN_WIDTH / 2;
+  var y = pin.offsetTop + MAIN_PIN_HEIGHT / 2;
+  updateAddress(x, y);
+}
+
 
 // Активация карты
 var onMainPinMousedown = function (evt) {
   if (evt.button === 0) {
     activateMap();
-    setInitialAddress(mapPinMain);
-    mapPinMain.removeEventListener('click', onMainPinMousedown);
+    setCurrentAddress(mapPinMain);
   }
 };
-
+// Третий аргумент говорит что событие должно произойти 1 раз, затем обработкик удалится
 mapPinMain.addEventListener('click', onMainPinMousedown, {once: true});
 
 
-// отдельный файл///////////////////////////////////////////////////////////////
-
+// отдельный файл//////////////////////////////////////////////////////////////////////////////
 // 4) Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»:
 var typeOfHouseSelector = document.querySelector('#type');
 var priceInput = document.querySelector('#price');
@@ -223,6 +217,7 @@ var MIN_PRICES = {
   palace: 10000
 };
 
+// Возвращает selected option, вызывает функцию установки мин. цены
 var onTypeOfHouseSelectorChange = function () {
   var selected = Array.from(typeOfHouseSelector.options)
     .filter(function (option) {
@@ -232,6 +227,7 @@ var onTypeOfHouseSelectorChange = function () {
   setMinPrice(houseType);
 };
 
+// Функция установки мин. цены
 var setMinPrice = function (houseType) {
   priceInput.setAttribute('min', MIN_PRICES[houseType]);
   priceInput.setAttribute('placeholder', MIN_PRICES[houseType]);
@@ -242,7 +238,7 @@ typeOfHouseSelector.addEventListener('change', onTypeOfHouseSelectorChange);
 //  5) Валидация. Установка соответствия количества гостей (спальных мест) с количеством комнат.
 var roomsNumberSelector = document.querySelector('#room_number');
 var capacitySelector = document.querySelector('#capacity');
-
+// var buttonSubmit = document.querySelector('.ad-form__submit');
 
 function validateRoomNumbers() {
   var roomsNumber = roomsNumberSelector.value;
@@ -250,6 +246,8 @@ function validateRoomNumbers() {
 
   if (roomsNumber === '100' && capacity !== '0') {
     roomsNumberSelector.setCustomValidity('Не для гостей');
+  } else if (roomsNumber !== '100' && capacity === '0') {
+    roomsNumberSelector.setCustomValidity('Не для гостей подходит только вариант "100 комнат"');
   } else if (roomsNumber < capacity) {
     roomsNumberSelector.setCustomValidity('Количество комнат не может быть меньше количества гостей');
   } else {
@@ -260,36 +258,3 @@ function validateRoomNumbers() {
 
 roomsNumberSelector.addEventListener('change', validateRoomNumbers);
 capacitySelector.addEventListener('change', validateRoomNumbers);
-
-
-// var buttonSubmit = document.querySelector('.ad-form__submit');
-
-// Метод setCustomValidity()
-// function checkPasscode() {
-// 	var passcode_input = document.querySelector("#passcode");
-
-// 	if (passcode_input.value != "Ivy") {
-// 		passcode_input.setCustomValidity("Wrong. It's 'Ivy'.");
-// 	} else {
-// 		passcode_input.setCustomValidity(""); // be sure to leave this empty!
-// 		alert("Correct!");
-// 	}
-// }
-
-// price.addEventListener('input', function () {
-//   checkPriceValidity();
-// });
-
-// function checkPriceValidity() {
-//   var validity = price.validity;
-//   if (validity.rangeUnderflow) {
-//     price.setCustomValidity('Цена должна быть не меньше ' + minPrice[type.options[type.selectedIndex].value] + ' руб.');
-//   } else if (validity.rangeOverflow) {
-//     price.setCustomValidity('Цена должна быть не больше 1 000 000 руб.');
-//   } else if (validity.valueMissing) {
-//     price.setCustomValidity('Обязательное поле');
-//   } else {
-//     price.setCustomValidity('');
-//     name1. style. background=’#FFFFFF’;
-//   }
-// }
