@@ -1,5 +1,11 @@
 'use strict';
+// data.js — модуль, который создаёт данные;
+// map.js — модуль, который управляет карточками объявлений и метками: добавляет на страницу нужную карточку, отрисовывает метки и осуществляет взаимодействие карточки и метки на карте;
+// card.js — модуль, который отвечает за создание карточки объявлений;
+// pin.js — модуль, который отвечает за создание метки на карте;
+// form.js — модуль, который работает с формой объявления.
 
+// Модуль data.js/////////////////////////////////////
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var TYPE = ['palace', 'flat', 'house', 'bungalo'];
 var CHECKINS = ['12:00', '13:00', '14:00'];
@@ -195,7 +201,7 @@ function setCurrentAddress(pin) {
 }
 
 
-// Активация карты
+// map.js Активация карты
 var onMainPinMousedown = function (evt) {
   if (evt.button === 0) {
     activateMap();
@@ -206,7 +212,7 @@ var onMainPinMousedown = function (evt) {
 mapPinMain.addEventListener('click', onMainPinMousedown, {once: true});
 
 
-// отдельный файл//////////////////////////////////////////////////////////////////////////////
+// form.js отдельный файл//////////////////////////////////////////////////////////////////////////////
 // 4) Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»:
 var typeOfHouseSelector = document.querySelector('#type');
 var priceInput = document.querySelector('#price');
