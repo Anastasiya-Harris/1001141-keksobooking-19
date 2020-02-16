@@ -5,7 +5,7 @@
 // pin.js — модуль, который отвечает за создание метки на карте;
 // form.js — модуль, который работает с формой объявления.
 
-// Модуль data.js/////////////////////////////////////
+
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var TYPE = ['palace', 'flat', 'house', 'bungalo'];
 var CHECKINS = ['12:00', '13:00', '14:00'];
@@ -27,7 +27,7 @@ var PIN_WIDTH = 70;
 var MAIN_PIN_HEIGHT = 156;
 var MAIN_PIN_WIDTH = 156;
 
-
+// utils.js — модуль, который отвечает за создание служебных функций;////////////////////////////
 // Возвращает рандомное число в диапазоне между параметрами min и max включительно.
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -45,6 +45,7 @@ var getRandomArrayFromArray = function (array) {
   return array.slice(0, maxLength);
 };
 
+// ad.js card.js — модуль, который отвечает за создание карточки объявлений;
 // Создаёт массив переданной длинны из объекта объявления.
 var getAdsArray = function () {
   var adsArray = [];
@@ -86,6 +87,7 @@ var createAd = function (i) {
   };
 };
 
+// pin.js — модуль, который отвечает за создание метки на карте;////////////////////////////
 // Отрисовывает во фрагменте сгенерированные DOM элементы в блок .map__pin
 var renderPins = function () {
   var map = document.querySelector('.map');
@@ -125,6 +127,7 @@ var renderPins = function () {
 
 // Новое задание /////////////////////////////////////////////////////////////////
 
+// map.js — модуль, который управляет карточками объявлений и метками: добавляет на страницу нужную карточку, отрисовывает метки и осуществляет взаимодействие карточки и метки на карте;
 // 1) Неактивное состояние.
 var fieldsets = document.querySelectorAll('fieldset');
 var mapFilters = document.querySelector('.map__filters');
@@ -153,7 +156,6 @@ var disactivateMap = function () {
   setInitialAddress(mapPinMain);
 };
 
-// отдельный файл///////////////////////////////////////////////////////////////
 // 2) Переводит страницу в активный режим.
 var removeFormDisabled = function () {
   for (var i = 0; i < fieldsets.length; i++) {
