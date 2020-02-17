@@ -12,7 +12,7 @@
     var fragment = document.createDocumentFragment();
 
     // Копируем по ссылке массив объявлений
-    var ads = window.utils.getAdsArray();
+    var ads = window.getAdsArray();
 
     // Клонируем темплейт объявления
     for (var i = 0; i < ads.length; i++) {
