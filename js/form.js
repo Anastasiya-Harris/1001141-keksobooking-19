@@ -12,14 +12,21 @@
   };
 
   // Возвращает selected option, вызывает функцию установки мин. цены
-  var onTypeOfHouseSelectorChange = function () {
-    var selected = Array.from(typeOfHouseSelector.options)
-      .filter(function (option) {
-        return option.selected;
-      });
-    var houseType = selected[0].value;
-    setMinPrice(houseType);
-  };
+  // var onTypeOfHouseSelectorChange = function () {
+  //   var selected = Array.from(typeOfHouseSelector.options)
+  //     .filter(function (option) {
+  //       return option.selected;
+  //     });
+  //   var houseType = selected[0].value;
+  //   setMinPrice(houseType);
+  // };
+
+  // Возвращает selected option, вызывает функцию установки мин. цены
+  // var onTypeOfHouseSelectorChange = function (evt) {
+  //   typeOfHouseSelector.value = evt.target.value;
+  //   var houseType = evt.target.value;
+  //   setMinPrice(houseType);
+  // };
 
   // Функция установки мин. цены
   var setMinPrice = function (houseType) {

@@ -10,26 +10,16 @@
   var MAX_PRICE = 1000000;
   var MIN_PRICE = 0;
 
-  var MIN_MAP_HIGHT = 130;
-  var MAX_MAP_HIGHT = 630;
+  var MIN_MAP_HEIGHT = 130;
+  var MAX_MAP_HEIGHT = 630;
   var mapWidth = document.querySelector('.map__overlay').offsetWidth;
 
   var MAX_ARRAY_LENGTH_OF_PINS = 8;
 
-  // Создаёт массив переданной длинны из объекта объявления.
-  window.getAdsArray = function () {
-    var adsArray = [];
-    for (var i = 0; i < MAX_ARRAY_LENGTH_OF_PINS; i++) {
-      var ad = createAd(i);
-      adsArray.push(ad);
-    }
-    return adsArray;
-  };
-
   // Создаёт объект объявление с переданным индексом
   var createAd = function (i) {
     var locationX = window.utils.getRandomNumber(0, mapWidth);
-    var locationY = window.utils.getRandomNumber(MIN_MAP_HIGHT, MAX_MAP_HIGHT);
+    var locationY = window.utils.getRandomNumber(MIN_MAP_HEIGHT, MAX_MAP_HEIGHT);
 
     return {
       author: {
@@ -55,5 +45,15 @@
         y: locationY
       }
     };
+  };
+
+  // Создаёт массив переданной длинны из объекта объявления.
+  window.getAdsArray = function () {
+    var adsArray = [];
+    for (var i = 0; i < MAX_ARRAY_LENGTH_OF_PINS; i++) {
+      var ad = createAd(i);
+      adsArray.push(ad);
+    }
+    return adsArray;
   };
 })();
