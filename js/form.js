@@ -12,15 +12,10 @@
   };
 
 
-  // Возвращает selected option, вызывает функцию установки мин. цены
+  // Установки мин. цены за ночь в зависимости от типа жилья
   var onTypeOfHouseSelectorChange = function (evt) {
-    typeOfHouseSelector.value = evt.target.value;
     var houseType = evt.target.value;
-    setMinPrice(houseType);
-  };
-
-  // Функция установки мин. цены
-  var setMinPrice = function (houseType) {
+    typeOfHouseSelector.value = houseType;
     priceInput.setAttribute('min', MIN_PRICES[houseType]);
     priceInput.setAttribute('placeholder', MIN_PRICES[houseType]);
   };
