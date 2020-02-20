@@ -2,15 +2,15 @@
 // pin.js — модуль, который отвечает за создание метки на карте;
 // Отрисовывает во фрагменте сгенерированные DOM элементы в блок .map__pin
 (function () {
-    var map = document.querySelector('.map');
+  var map = document.querySelector('.map');
 
-    var template = document.querySelector('#pin').content.querySelector('.map__pin');
-    var pinListElement = document.querySelector('.map__pins');
+  var template = document.querySelector('#pin').content.querySelector('.map__pin');
+  var pinListElement = document.querySelector('.map__pins');
 
-    // Создаём массив объявлений
-    // var ads = window.getAdsArray();
+  // Создаём массив объявлений
+  // var ads = window.getAdsArray();
 
-    window.load (function (map) {
+  window.load(function (map) {
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < 8; i++) {
@@ -29,7 +29,7 @@
 
     // Показывает карту
     map.classList.remove('map--faded');
-  };
+  });
 })();
 
 // (function () {
