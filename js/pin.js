@@ -10,7 +10,7 @@
     var pinElement = template.cloneNode(true);
 
     pinElement.style.left = (ad.location.x - window.map.PIN_WIDTH / 2) + 'px';
-    pinElement.style.top = (ad.location.y - window.map.assignedSlotPIN_HEIGHT) + 'px';
+    pinElement.style.top = (ad.location.y - window.map.PIN_HEIGHT) + 'px';
     pinElement.querySelector('img').src = ad.author.avatar;
     pinElement.querySelector('img').alt = ad.offer.title;
     return pinElement;
