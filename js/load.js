@@ -1,7 +1,7 @@
 'use strict';
 // load.js — модуль, который загружает данные;
 (function () {
-  var URL = 'https://js.dump.academy/keksobooking/data.';
+  var URL = 'https://js.dump.academy/keksobooking/data';
   var StatusCode = {
     OK: 200
   };
