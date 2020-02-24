@@ -6,6 +6,7 @@
     OK: 200
   };
   var TIMEOUT_IN_MS = 10000;
+  var MAX_ADS_COUNT = 5;
 
   window.load = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
@@ -13,7 +14,8 @@
 
     xhr.addEventListener('load', function () {
       if (xhr.status === StatusCode.OK) {
-        onSuccess(xhr.response);
+        var ads = xhr.response.splice(0, MAX_ADS_COUNT);
+        onSuccess(ads);
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
