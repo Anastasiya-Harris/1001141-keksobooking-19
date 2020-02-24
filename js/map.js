@@ -55,9 +55,20 @@
     removeMapDisabled();
   };
 
+  var successHandler = function (ads) {
+    window.pin.renderPins(ads);
+  };
+
+  var errorHandler = function (errorMessage) {
+    var errorAlert = document.querySelector('#error').content.querySelector('.error');
+
+    errorAlert.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', errorAlert);
+  };
+
   var activateMap = function () {
+    window.load(successHandler, errorHandler);
     removeDisabled();
-    window.pin.renderPins();
   };
 
   disactivateMap();
