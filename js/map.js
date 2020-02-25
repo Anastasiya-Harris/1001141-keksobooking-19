@@ -103,6 +103,33 @@
   // Третий аргумент говорит что событие должно произойти 1 раз, затем обработкик удалится
   mapPinMain.addEventListener('click', onMainPinMousedown, {once: true});
 
+  adForm.addEventListener('submit', function (evt) {
+    window.upload(new FormData(adForm), function (response) {
+    // После успешной передачи данных на сервер верните страницу
+    // в неактивное состояние и сбросьте форму.
+    });
+    evt.preventDefault();
+  });
+
+  // adForm.content.querySelector('.success');
+
+  // var successAlert = function (onSuccess) {
+  // document.querySelector('#success').cloneNode
+  // errorAlert.textContent = successMessage;
+  //   document.body.insertAdjacentElement('afterbegin', errorAlert);
+
+  // 1 Доработайте обработчик отправки формы, так чтобы он отменял действие по умолчанию preventDefault
+  // и отправлял данные формы на сервер посредством XHR https://js.dump.academy/keksobooking.
+
+  // 2 После успешной передачи данных на сервер верните страницу в неактивное состояние и сбросьте форму.
+
+  // 3 Если отправка данных прошла успешно, показывается сообщение #success внутри шаблона template.
+  // Сообщение должно исчезать по Esc и по клику на произвольную область экрана.
+
+  // 4 Если произошла ошибка запроса, покажите в main сообщение #error в шаблоне template,
+  // Сообщение должно исчезать после нажатия на кнопку .error__button, по нажатию на клавишу Esc и по клику на произвольную область экрана.
+
+  // 5 Добавьте обработчик кнопке очистки формы.
   window.map = {
     PIN_HEIGHT: PIN_HEIGHT,
     PIN_WIDTH: PIN_WIDTH,
