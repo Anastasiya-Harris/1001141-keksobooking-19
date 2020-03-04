@@ -1,14 +1,18 @@
 'use strict';
 // load.js — модуль, который загружает данные;
 (function () {
-  var URL = 'https://js.dump.academy/keksobooking/data';
+  var Url = {
+    GET: 'https://js.dump.academy/keksobooking/data',
+    POST: 'https://js.dump.academy/keksobooking'
+  };
+
   var StatusCode = {
     OK: 200
   };
   var TIMEOUT_IN_MS = 10000;
   var MAX_ADS_COUNT = 5;
 
-  window.load = function (onSuccess, onError) {
+  window.load = function (onSuccess, onError, loadingMessage) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -32,4 +36,27 @@
     xhr.open('GET', URL);
     xhr.send();
   };
+
+
+  window.backend = {
+    get: get,
+    post: post
+  };
 })();
+
+(function () {
+  var URL = 'https://js.dump.academy/code-and-magick';
+
+  window.upload = function (data, onSuccess) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+
+    xhr.addEventListener('load', function () {
+      onSuccess(xhr.response);
+    });
+
+    xhr.open('POST', URL);
+    xhr.send(data);
+  };
+})();
+
