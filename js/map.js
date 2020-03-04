@@ -104,19 +104,19 @@
   mapPinMain.addEventListener('click', onMainPinMousedown, {once: true});
 
   adForm.addEventListener('submit', function (evt) {
-    window.upload(new FormData(adForm), function (response) {
+    window.load(new FormData(adForm), function (response) {
     // После успешной передачи данных на сервер верните страницу
     // в неактивное состояние и сбросьте форму.
     });
     evt.preventDefault();
   });
 
-  // adForm.content.querySelector('.success');
+  adForm.content.querySelector('.success');
 
-  // var successAlert = function (onSuccess) {
-  // document.querySelector('#success').cloneNode
-  // errorAlert.textContent = successMessage;
-  //   document.body.insertAdjacentElement('afterbegin', errorAlert);
+  var successAlert = function (onSuccess) {
+  document.querySelector('#success').cloneNode
+  errorAlert.textContent = successMessage;
+    document.body.insertAdjacentElement('afterbegin', errorAlert);
 
   // 1 Доработайте обработчик отправки формы, так чтобы он отменял действие по умолчанию preventDefault
   // и отправлял данные формы на сервер посредством XHR https://js.dump.academy/keksobooking.
