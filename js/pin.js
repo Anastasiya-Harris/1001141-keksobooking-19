@@ -1,7 +1,6 @@
 'use strict';
 // pin.js — модуль, который отвечает за создание меткок на карте;
 (function () {
-  // var MAX_ADS_COUNT = 8;
 
   var template = document.querySelector('#pin').content.querySelector('.map__pin');
 

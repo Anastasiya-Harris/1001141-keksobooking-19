@@ -7,6 +7,9 @@
   var PIN_HEIGHT = 50;
   var PIN_WIDTH = 70;
 
+  var mapPinMain = document.querySelector('.map__pin--main');
+  var addressInput = document.querySelector('#address');
+
   // 1) Неактивное состояние.
   var fieldsets = document.querySelectorAll('fieldset');
   var mapFilters = document.querySelector('.map__filters');
@@ -24,9 +27,6 @@
       mapFilters[i].setAttribute('disabled', 'disabled');
     }
   };
-
-  var mapPinMain = document.querySelector('.map__pin--main');
-  var addressInput = document.querySelector('#address');
 
   // Блокирует формы
   var disactivateMap = function () {
@@ -67,7 +67,7 @@
   };
 
   var activateMap = function () {
-    window.load(successHandler, errorHandler);
+    window.backend.load(successHandler, errorHandler);
     removeDisabled();
   };
 
@@ -104,19 +104,29 @@
   mapPinMain.addEventListener('click', onMainPinMousedown, {once: true});
 
   adForm.addEventListener('submit', function (evt) {
-    window.load(new FormData(adForm), function (response) {
+    window.backend.upload(new FormData(adForm), function (response) {
     // После успешной передачи данных на сервер верните страницу
     // в неактивное состояние и сбросьте форму.
+      adForm.classList.add('hidden');
     });
     evt.preventDefault();
   });
 
-  adForm.content.querySelector('.success');
+  var formReset = document.querySelector('.ad-form__reset');
+  formReset.addEventListener('submit', function (evt) {
+    // Добавьте обработчик кнопке очистки формы.
+    evt.preventDefault();
+    window.form.returnInitialPageState();
+  });
 
-  var successAlert = function (onSuccess) {
-  document.querySelector('#success').cloneNode
-  errorAlert.textContent = successMessage;
-    document.body.insertAdjacentElement('afterbegin', errorAlert);
+
+  // adForm.content.querySelector('.success');
+
+  // var successAlert = function (onSuccess) {
+  //   document.querySelector('#success').cloneNode
+  //   errorAlert.textContent = successMessage;
+  //   document.body.insertAdjacentElement('afterbegin', errorAlert);
+  // };
 
   // 1 Доработайте обработчик отправки формы, так чтобы он отменял действие по умолчанию preventDefault
   // и отправлял данные формы на сервер посредством XHR https://js.dump.academy/keksobooking.
@@ -133,5 +143,8 @@
   window.map = {
     PIN_HEIGHT: PIN_HEIGHT,
     PIN_WIDTH: PIN_WIDTH,
+    disactivateMap: disactivateMap,
+    addMapDisabled: addMapDisabled,
+    errorHandler: errorHandler,
   };
 })();
