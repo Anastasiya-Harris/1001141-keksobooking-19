@@ -7,9 +7,6 @@
   var PIN_HEIGHT = 50;
   var PIN_WIDTH = 70;
 
-  var mapPinMain = document.querySelector('.map__pin--main');
-  var addressInput = document.querySelector('#address');
-
   // 1) Неактивное состояние.
   var fieldsets = document.querySelectorAll('fieldset');
   var mapFilters = document.querySelector('.map__filters');
@@ -27,6 +24,9 @@
       mapFilters[i].setAttribute('disabled', 'disabled');
     }
   };
+
+  var mapPinMain = document.querySelector('.map__pin--main');
+  var addressInput = document.querySelector('#address');
 
   // Блокирует формы
   var disactivateMap = function () {
@@ -55,19 +55,30 @@
     removeMapDisabled();
   };
 
-  var successHandler = function (ads) {
+  var onSuccess = function (ads) {
     window.pin.renderPins(ads);
   };
 
-  var errorHandler = function (errorMessage) {
-    var errorAlert = document.querySelector('#error').content.querySelector('.error');
 
-    errorAlert.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', errorAlert);
+  // Показ ошибок пользователю
+  var onError = function (errorMessage) {
+    var message = document.createElement('div');
+    message.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    message.style.position = 'absolute';
+    message.style.left = 0;
+    message.style.right = 0;
+    message.style.fontSize = '28px';
+
+    message.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', message);
+    var messageClickHandler = function () {
+      message.remove();
+    };
+    message.addEventListener('click', messageClickHandler);
   };
 
   var activateMap = function () {
-    window.backend.load(successHandler, errorHandler);
+    window.backend.load(onSuccess, onError);
     removeDisabled();
   };
 
@@ -103,30 +114,22 @@
   // Третий аргумент говорит что событие должно произойти 1 раз, затем обработкик удалится
   mapPinMain.addEventListener('click', onMainPinMousedown, {once: true});
 
-  adForm.addEventListener('submit', function (evt) {
-    window.backend.upload(new FormData(adForm), function (response) {
-    // После успешной передачи данных на сервер верните страницу
-    // в неактивное состояние и сбросьте форму.
-      adForm.classList.add('hidden');
-    });
-    evt.preventDefault();
-  });
+  // adForm.addEventListener('submit', function (evt) {
+  //   window.backend.upload(new FormData(adForm), function (response) {
+  //   // После успешной передачи данных на сервер верните страницу
+  //   // в неактивное состояние и сбросьте форму.
+  //     adForm.classList.add('hidden');
+  //   });
+  //   evt.preventDefault();
+  // });
 
-  var formReset = document.querySelector('.ad-form__reset');
-  formReset.addEventListener('submit', function (evt) {
-    // Добавьте обработчик кнопке очистки формы.
-    evt.preventDefault();
-    window.form.returnInitialPageState();
-  });
+  // var formReset = document.querySelector('.ad-form__reset');
+  // formReset.addEventListener('submit', function (evt) {
+  //   // Добавьте обработчик кнопке очистки формы.
+  //   evt.preventDefault();
+  //   window.form.returnInitialPageState();
+  // });
 
-
-  // adForm.content.querySelector('.success');
-
-  // var successAlert = function (onSuccess) {
-  //   document.querySelector('#success').cloneNode
-  //   errorAlert.textContent = successMessage;
-  //   document.body.insertAdjacentElement('afterbegin', errorAlert);
-  // };
 
   // 1 Доработайте обработчик отправки формы, так чтобы он отменял действие по умолчанию preventDefault
   // и отправлял данные формы на сервер посредством XHR https://js.dump.academy/keksobooking.
@@ -145,6 +148,7 @@
     PIN_WIDTH: PIN_WIDTH,
     disactivateMap: disactivateMap,
     addMapDisabled: addMapDisabled,
-    errorHandler: errorHandler,
+    onSuccess: onSuccess,
+    onError: onError,
   };
 })();

@@ -1,10 +1,7 @@
 // form.js — модуль, который работает с формой объявления.
 'use strict';
 (function () {
-  // Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»
-  var MAIN_PIN_START_TOP = 375;
-  var MAIN_PIN_START_LEFT = 50;
-
+  // Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»:
   var typeOfHouseSelector = document.querySelector('#type');
   var priceInput = document.querySelector('#price');
   var MIN_PRICES = {
@@ -14,6 +11,10 @@
     palace: 10000
   };
 
+  var roomsNumberSelector = document.querySelector('#room_number');
+  var capacitySelector = document.querySelector('#capacity');
+  var adForm = document.querySelector('.ad-form');
+  var adFormResetButton = adForm.querySelector('.ad-form__reset');
 
   // Установки мин. цены за ночь в зависимости от типа жилья
   var onTypeOfHouseSelectorChange = function (evt) {
@@ -26,9 +27,6 @@
   typeOfHouseSelector.addEventListener('change', onTypeOfHouseSelectorChange);
 
   // Валидация. Установка соответствия количества гостей (спальных мест) с количеством комнат.
-  var roomsNumberSelector = document.querySelector('#room_number');
-  var capacitySelector = document.querySelector('#capacity');
-
   function validateRoomNumbers() {
     var roomsNumber = roomsNumberSelector.value;
     var capacity = capacitySelector.value;
@@ -45,63 +43,28 @@
     }
   }
 
+  adForm.addEventListener('submit', function (evt) {
+    var submitButton = adForm.querySelector('.ad-form__submit');
+    // submitButton.textContent = 'Данные отправляются...';
 
-  // Функция очистки формы и карты
+    window.backend.upload(new FormData(adForm));
+    // , function
+    // (response) {
 
-  var adForm = document.querySelector('.ad-form');
-  var mapPinMain = document.querySelector('.map__pin--main');
+    // });
+    evt.preventDefault();
+  });
 
-  var returnInitialPageState = function () {
-    window.adForm.formReset();
-    validateRoomNumbers();
-    window.map.addFormDisabled();
-    // window.popup.close();
-    mapPinMain.style.top = MAIN_PIN_START_TOP + 'px';
-    mapPinMain.style.left = MAIN_PIN_START_LEFT + '%';
+  var onResetButtonClick = function (evt) {
+    evt.preventDefault();
     window.map.disactivateMap();
-    // removeFormPhotos();
-
-    var mapPins = document.querySelector('.map__pins');
-    var mapPin = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    var map = document.querySelector('.map');
-    map.classList.add('map--faded');
-
-    for (var k = 0; k < mapPin.length; k++) {
-      var elem = mapPin[k];
-      mapPins.removeChild(elem);
-    }
+    adForm.reset();
+    debugger;
   };
 
-  var formReset = document.querySelector('.ad-form__reset');
-  formReset.addEventListener('click', function (evt) {
-    // Добавьте обработчик кнопке очистки формы.
-    evt.preventDefault();
-    returnInitialPageState();
-  });
 
-  adForm.addEventListener('submit', function (evt) {
-    validateRoomNumbers();
-    evt.preventDefault();
-    window.backend.upload(new FormData(adForm), window.map.errorHandler);
-    returnInitialPageState();
-  });
-
-  /**
-  * Функция удаления изображений из формы
-  */
-  // var removeFormPhotos = function () {
-  //   document.querySelector('.ad-form-header__preview img').src = 'img/muffin-grey.svg';
-  //   var formPhotos = document.querySelectorAll('.form__photo-container img');
-
-  //   for (var i = 0; i < formPhotos.length; i++) {
-  //     formPhotos[i].remove();
-  //   }
-  // };
+  adFormResetButton.addEventListener('click', onResetButtonClick);
 
   roomsNumberSelector.addEventListener('change', validateRoomNumbers);
   capacitySelector.addEventListener('change', validateRoomNumbers);
-
-  window.form = {
-    returnInitialPageState: returnInitialPageState,
-  };
 })();
