@@ -14,7 +14,7 @@
   var roomsNumberSelector = document.querySelector('#room_number');
   var capacitySelector = document.querySelector('#capacity');
   var adForm = document.querySelector('.ad-form');
-  var adFormResetButton = adForm.querySelector('.ad-form__reset');
+  var submitButton = adForm.querySelector('.ad-form__reset');
 
   // Установки мин. цены за ночь в зависимости от типа жилья
   var onTypeOfHouseSelectorChange = function (evt) {
@@ -43,27 +43,27 @@
     }
   }
 
+  // Вынести в отдельную функцию сброс формы!!!//////////////////
   adForm.addEventListener('submit', function (evt) {
-    var submitButton = adForm.querySelector('.ad-form__submit');
-    // submitButton.textContent = 'Данные отправляются...';
-
-    window.backend.upload(new FormData(adForm));
-    // , function
-    // (response) {
-
-    // });
+    window.backend.upload(new FormData(adForm),
+        function (response) {
+          debugger;
+          adForm.reset();
+          window.map.disactivateMap();
+        }
+    );
     evt.preventDefault();
+    adForm.reset();
   });
 
-  var onResetButtonClick = function (evt) {
-    evt.preventDefault();
-    window.map.disactivateMap();
-    adForm.reset();
-    debugger;
-  };
+  // var onResetButtonClick = function (evt) {
+  //   evt.preventDefault();
+  //   window.map.disactivateMap();
+  //   adForm.reset();
+  // };
 
 
-  adFormResetButton.addEventListener('click', onResetButtonClick);
+  // adFormResetButton.addEventListener('click', onResetButtonClick);
 
   roomsNumberSelector.addEventListener('change', validateRoomNumbers);
   capacitySelector.addEventListener('change', validateRoomNumbers);

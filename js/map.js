@@ -6,12 +6,14 @@
   var MAIN_PIN_WIDTH = 156;
   var PIN_HEIGHT = 50;
   var PIN_WIDTH = 70;
+  var MAX_ADS_COUNT = 5;
 
   // 1) Неактивное состояние.
   var fieldsets = document.querySelectorAll('fieldset');
   var mapFilters = document.querySelector('.map__filters');
   var adForm = document.querySelector('.ad-form');
   var map = document.querySelector('.map');
+  // var templateError = document.querySelector('#error').cloneNode(true).content;
 
   var addFormDisabled = function () {
     for (var i = 0; i < fieldsets.length; i++) {
@@ -56,26 +58,88 @@
   };
 
   var onSuccess = function (ads) {
-    window.pin.renderPins(ads);
+    if (ads.length > MAX_ADS_COUNT) {
+      var adsResalt = ads.splice(0, MAX_ADS_COUNT);
+      window.pin.renderPins(adsResalt);
+    }
   };
 
+  // Вынести в отдельную функцию сброс формы!!!//////////////////
+  var resetAll = function (evt) {
+    window.backend.upload(new FormData(adForm),
+        function (response) {
+          debugger;
+          adForm.reset();
+          disactivateMap();
+        }
+    );
+    evt.preventDefault();
+    adForm.reset();
+  };
+
+  // adForm.addEventListener('submit', function (evt) {
+  //   window.backend.upload(new FormData(adForm),
+  //       function (response) {
+  //         debugger;
+  //         adForm.reset();
+  //         window.map.disactivateMap();
+  //       }
+  //   );
+  //   evt.preventDefault();
+  //   adForm.reset();
+  // });
+
+  // var onResetButtonClick = function (evt) {
+  //   evt.preventDefault();
+  //   window.map.disactivateMap();
+  //   adForm.reset();
+  // };
+
+
+  // adFormResetButton.addEventListener('click', onResetButtonClick);
+
+  adForm.addEventListener('submit', resetAll);
+
+  var ESC_KEYCODE = 27;
+
+  var closePopUp = function () {
+    var card = document.querySelector('.map__card');
+    if (card) {
+      map.removeChild(card);
+      document.removeEventListener('keydown', onPopupEscPress);
+      map.removeEventListener('keydown', onPopupEscPress);
+    }
+  };
+
+  var onPopupEscPress = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      closePopUp();
+    }
+  };
+
+  // var onError = function (errorMessage) {
+  //   var errorElement = templateError.querySelector('.error');
+  //   errorElement.querySelector('.error__message').textContent = window.errorMessage;
+  //   document.body.insertAdjacentElement('afterbegin', errorElement);
+  // };
 
   // Показ ошибок пользователю
-  var onError = function (errorMessage) {
-    var message = document.createElement('div');
-    message.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-    message.style.position = 'absolute';
-    message.style.left = 0;
-    message.style.right = 0;
-    message.style.fontSize = '28px';
+  // var onError = function (errorMessage) {
+  //   var message = document.createElement('div');
+  //   message.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+  //   message.style.position = 'absolute';
+  //   message.style.left = 0;
+  //   message.style.right = 0;
+  //   message.style.fontSize = '28px';
 
-    message.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', message);
-    var messageClickHandler = function () {
-      message.remove();
-    };
-    message.addEventListener('click', messageClickHandler);
-  };
+
+  //   message.textContent = errorMessage;
+  //   document.body.insertAdjacentElement('afterbegin', message);
+  //   var messageClickHandler = function () {
+  //     message.remove();
+  //   };
+  //   message.addEventListener('click', messageClickHandler);
+  // };
 
   var activateMap = function () {
     window.backend.load(onSuccess, onError);
@@ -123,14 +187,6 @@
   //   evt.preventDefault();
   // });
 
-  // var formReset = document.querySelector('.ad-form__reset');
-  // formReset.addEventListener('submit', function (evt) {
-  //   // Добавьте обработчик кнопке очистки формы.
-  //   evt.preventDefault();
-  //   window.form.returnInitialPageState();
-  // });
-
-
   // 1 Доработайте обработчик отправки формы, так чтобы он отменял действие по умолчанию preventDefault
   // и отправлял данные формы на сервер посредством XHR https://js.dump.academy/keksobooking.
 
@@ -149,6 +205,6 @@
     disactivateMap: disactivateMap,
     addMapDisabled: addMapDisabled,
     onSuccess: onSuccess,
-    onError: onError,
+    // onError: onError,
   };
 })();

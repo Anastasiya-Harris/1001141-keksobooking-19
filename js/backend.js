@@ -14,9 +14,10 @@
     NOT_FOUND: 404,
   };
 
-  var TIMEOUT_IN_MS = 10000;
+  var TIMEOUT_IN_MS = 1000;
   var MAX_ADS_COUNT = 5;
 
+  var errorMessage = '';
   // var load = function (onSuccess, onError) {
   //   var xhr = new XMLHttpRequest();
   //   xhr.responseType = 'json';
@@ -71,33 +72,31 @@
     xhr.timeout = TIMEOUT_IN_MS;
 
     xhr.addEventListener('load', function () {
-      var error;
-
       switch (xhr.status) {
         case StatusCode.OK:
           onSuccess(xhr.response);
-          // var ads = xhr.response.splice(0, MAX_ADS_COUNT);
-          // onSuccess(ads); // ..ошибка здесь объявления должны загружаться, но не отправляться
+
           break;
         case StatusCode.BAD_REQUEST:
-          error = 'Неверный запрос';
+          errorMessage = 'Неверный запрос';
           break;
         case StatusCode.UNATHORIZED:
-          error = 'Вы не авторизованы';
+          errorMessage = 'Вы не авторизованы';
           break;
         case StatusCode.FORBIDDEN:
-          error = 'Доступ запрещён';
+          errorMessage = 'Доступ запрещён';
           break;
         case StatusCode.NOT_FOUND:
-          error = 'Объекты не найдены';
+          errorMessage = 'Объекты не найдены';
           break;
         default:
-          error = 'Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText;
+          errorMessage = 'Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText;
       }
-      if (error) {
-        onError(error);
+      if (errorMessage > 0) {
+        onError(errorMessage);
       }
     });
+
     xhr.addEventListener('error', function () {
       onError('Произошла ошибка соединения');
     });
@@ -107,12 +106,31 @@
 
     return xhr;
   };
+  //  };
+  var templateError = document.querySelector('#error').cloneNode(true).content;
+
+  var onError = function (errorMessage) {
+    var errorElement = templateError.querySelector('.error');
+    errorElement.querySelector('.error__message').textContent = window.errorMessage;
+    document.body.appendChild(errorElement);
+    var messageClickHandler = function () {
+      message.remove();
+    };
+    message.addEventListener('click', messageClickHandler);
+  };
+
+
+  var reduceAds = function (onSuccess, ads, response) {
+    response.splice(0, MAX_ADS_COUNT);
+    onSuccess(ads);
+  };
 
   var downloadAds = function (onSuccess, onError) {
     var xhr = setXhr(onSuccess, onError);
 
     xhr.open('GET', Url.GET);
     xhr.send();
+    // reduceAds();
   };
 
   var uploadForm = function (data, onSuccess, onError) {
@@ -121,6 +139,7 @@
     xhr.open('POST', Url.POST);
     xhr.send(data);
   };
+
 
   // var adForm = document.querySelector('.ad-form');
   // var submitButton = adForm.querySelector('.ad-form__submit');
@@ -138,7 +157,8 @@
 
   window.backend = {
     load: downloadAds,
-    upload: uploadForm
+    upload: uploadForm,
+    errorMessage: errorMessage,
   };
 })();
 
