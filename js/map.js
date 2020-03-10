@@ -13,7 +13,8 @@
   var mapFilters = document.querySelector('.map__filters');
   var adForm = document.querySelector('.ad-form');
   var map = document.querySelector('.map');
-  // var templateError = document.querySelector('#error').cloneNode(true).content;
+  var adFormResetButton = adForm.querySelector('.ad-form__reset');
+
 
   var addFormDisabled = function () {
     for (var i = 0; i < fieldsets.length; i++) {
@@ -65,6 +66,8 @@
     }
   };
 
+  var successTemplate = document.querySelector('#success').content.querySelector('.success');
+
   // Деактивирует страницу
   var disactivatePage = function () {
     map.classList.add('map--faded');
@@ -73,31 +76,30 @@
     addFormDisabled();
     disactivateMap();
     // successMessage();
+    window.popup.successMessage(successTemplate);
   };
 
   // Сбрасывает форму
   var formReset = function (evt) {
-    window.backend.upload(new FormData(adForm),
-      function (response) {
-        adForm.reset();
-        disactivatePage();
-      }
-    );
+    window.backend.upload(new FormData(adForm), function (response) {
+      adForm.reset();
+      disactivatePage();
+    });
+
     evt.preventDefault();
     mapPinMain.addEventListener('click', onMainPinMousedown, {once: true});
   };
 
   adForm.addEventListener('submit', formReset);
 
+  // обработчик кнопки сброса
+  var onResetButtonClick = function (evt) {
+    evt.preventDefault();
+    disactivatePage();
+  };
 
-  // var onResetButtonClick = function (evt) {
-  //   evt.preventDefault();
-  //   window.map.disactivateMap();
-  //   adForm.reset();
-  // };
 
-
-  // adFormResetButton.addEventListener('click', onResetButtonClick);
+  adFormResetButton.addEventListener('click', onResetButtonClick);
 
 
   var activateMap = function () {

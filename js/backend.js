@@ -14,28 +14,10 @@
     NOT_FOUND: 404,
   };
 
-  var TIMEOUT_IN_MS = 1000;
-  var MAX_ADS_COUNT = 5;
+  var TIMEOUT_IN_MS = 100;
 
   var errorMessage = '';
-
-
-  // var errorHandler = function (errorMessage) {
-  //   var errorWindow = document.querySelector('#error').content.querySelector('.error');
-  //   errorWindow.textContent = errorMessage;
-  //   document.body.insertAdjacentElement('afterbegin', errorWindow);
-  // };
-
-  // var onSuccess = function (ads) {
-  //   window.pin.renderPins(ads);
-  // };
-
-  // var onError = function (errorMessage) {
-  //   var errorAlert = document.querySelector('#error').content.querySelector('.error');
-
-  //   errorAlert.textContent = errorMessage;
-  //   document.body.insertAdjacentElement('afterbegin', errorAlert);
-  // };
+  var onError = '';
 
 
   var setXhr = function (onSuccess, onError) {
@@ -48,7 +30,6 @@
       switch (xhr.status) {
         case StatusCode.OK:
           onSuccess(xhr.response);
-
           break;
         case StatusCode.BAD_REQUEST:
           errorMessage = 'Неверный запрос';
@@ -79,54 +60,30 @@
 
     return xhr;
   };
-  //  };
-  var templateError = document.querySelector('#error').cloneNode(true).content;
+
+
+  var templateError = document.querySelector('#error').content.querySelector('.error');
+
+  // var templateError = document.querySelector('#error').cloneNode(true).content;
+  var errorButton = templateError.querySelector('.error__button');
+
+
+  var renderErrorMessage = function (errorMessage) {
+    var message = templateError.querySelector('.error__message');
+    message.textContent = errorMessage;
+    message.appendChild(errorMessage);
+    var onMessageKeydown = function (evt) {
+      if (evt.key === 'Escape') {
+        message.removeChild(errorMessage);
+        document.removeEventListener('keydown', onMessageKeydown);
+      }
+    };
+  };
 
   var onError = function (errorMessage) {
-    var errorElement = templateError.querySelector('.error');
-    errorElement.querySelector('.error__message').textContent = window.errorMessage;
-    document.body.appendChild(errorElement);
-    var messageClickHandler = function () {
-      message.remove();
-    };
-    message.addEventListener('click', messageClickHandler);
+    renderErrorMessage(errorMessage);
   };
 
-  // Popup успеха/////////////////////////////////
-  var submitButton = document.querySelector('.ad-form__submit');
-
-  var templateSuccess = document.querySelector('#success')
-
-  var successMessage = function() {
-    var template = templateSuccess.cloneNode(true)
-    .content
-    .querySelector('.success__message').cloneNode(true);
-    document.body.appendChild(template);
-  };
-
-  submitButton.addEventListener('click', successMessage);
-
-  // Закрытие Popup успеха/////////////////////////////////
-  var ESC_KEYCODE = 27;
-
-  var closePopUp = function () {
-    var template = templateSuccess;
-    if (template) {
-      map.removeChild(template);
-      document.removeEventListener('keydown', onPopupEscPress);
-      map.removeEventListener('keydown', onPopupEscPress);
-    }
-  };
-
-  var onPopupEscPress = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      closePopUp();
-    }
-  };
-
-
-
-  ///////////////////////////////////////////////
 
   // Отправляет Ayax запросы
   var downloadAds = function (onSuccess, onError) {
@@ -147,9 +104,8 @@
   window.backend = {
     load: downloadAds,
     upload: uploadForm,
-    onError: onError,
+    // onError: onError,
     errorMessage: errorMessage,
-    successMessage: successMessage,
   };
 })();
 
