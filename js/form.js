@@ -43,28 +43,6 @@
     }
   }
 
-  // Вынести в отдельную функцию сброс формы!!!//////////////////
-  adForm.addEventListener('submit', function (evt) {
-    window.backend.upload(new FormData(adForm),
-        function (response) {
-          debugger;
-          adForm.reset();
-          window.map.disactivateMap();
-        }
-    );
-    evt.preventDefault();
-    adForm.reset();
-  });
-
-  // var onResetButtonClick = function (evt) {
-  //   evt.preventDefault();
-  //   window.map.disactivateMap();
-  //   adForm.reset();
-  // };
-
-
-  // adFormResetButton.addEventListener('click', onResetButtonClick);
-
   roomsNumberSelector.addEventListener('change', validateRoomNumbers);
   capacitySelector.addEventListener('change', validateRoomNumbers);
 })();

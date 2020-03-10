@@ -25,7 +25,16 @@
     map.appendChild(fragment);
   };
 
+  var removePins = function () {
+    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+    mapPins.forEach(function(pin) {
+      pin.remove();
+    });
+  };
+
   window.pin = {
     renderPins: renderPins,
+    removePins: removePins,
   };
 })();
