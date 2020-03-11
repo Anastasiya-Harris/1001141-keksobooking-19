@@ -14,7 +14,7 @@
     NOT_FOUND: 404,
   };
 
-  var TIMEOUT_IN_MS = 10000;
+  var TIMEOUT_IN_MS = 100;
 
   var errorMessage = '';
   var onError = '';
@@ -67,11 +67,13 @@
   // var templateError = document.querySelector('#error').cloneNode(true).content;
   var errorButton = templateError.querySelector('.error__button');
 
+  // При клике на errorbutton должна ошибка должна закрыться, обработкик удатиться
 
   var renderErrorMessage = function (errorMessage) {
-    var message = templateError.querySelector('.error__message');
-    message.textContent = errorMessage;
-    message.appendChild(window.popup.errorMessage);
+    var errorText = templateError.querySelector('.error__message');
+    errorText.textContent = errorMessage;
+    templateError.appendChild(errorMessage);
+
     var onMessageKeydown = function (evt) {
       if (evt.key === 'Escape') {
         message.removeChild(errorMessage);
@@ -84,6 +86,31 @@
     renderErrorMessage(errorMessage);
   };
 
+  var closeError = function () {
+    templateError.removeChild(errorMessage);
+    document.removeEventListener('keydown', onMessageKeydown);
+    errorButton.removeEventListener('click', onCloseErrorBtnClick);
+    document.removeEventListener('keydown', onErrorEscDown);
+  };
+
+  var onCloseErrorBtnClick = function () {
+    closeError();
+  };
+
+  var onErrorEscDown = function (evt) {
+    onEscDown(evt, closeError);
+  };
+
+  errorButton.addEventListener('click', onCloseErrorBtnClick);
+
+
+  var ESC_KEYCODE = 'Escape';
+
+  var onEscDown = function (evt, func) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      func();
+    }
+  };
 
   // Отправляет Ayax запросы
   var downloadAds = function (onSuccess, onError) {
