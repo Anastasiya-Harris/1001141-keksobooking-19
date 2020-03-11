@@ -1,33 +1,33 @@
 'use strict';
 // Popup.js — модуль, который работает с формой.
 
-var ESC_KEYCODE = 'Escape';
+// var ESC_KEYCODE = 'Escape';
 
 
-// var templateError = document.querySelector('#error').content.querySelector('.error');
+var templateError = document.querySelector('#error').content.querySelector('.error');
 
 // var templateError = document.querySelector('#error').cloneNode(true).content;
 
-// var errorButton = templateError.querySelector('.error__button');
-// var onError = function (errorMessage) {
-//   var errorElement = templateError.querySelector('.error');
-//   errorElement.querySelector('.error__message').textContent = window.errorMessage;
-//   document.body.appendChild(errorElement);
-//   var messageClickHandler = function () {
-//     message.remove();
-//     // debugger;
-//     errorButton.addEventListener('click', messageClickHandler);
-//   };
-// };
+var errorButton = templateError.querySelector('.error__button');
+var onError = function (errorMessage) {
+  var errorElement = templateError.querySelector('.error');
+  errorElement.querySelector('.error__message').textContent = window.errorMessage;
+  document.body.appendChild(errorElement);
+  var messageClickHandler = function () {
+    message.remove();
+    // debugger;
+    errorButton.addEventListener('click', messageClickHandler);
+  };
+};
 
-// // Popup успеха/////////////////////////////////
-// var submitButton = document.querySelector('.ad-form__submit');
+// Popup успеха/////////////////////////////////
+var submitButton = document.querySelector('.ad-form__submit');
 
-// var onEscDown = function (evt, func) {
-//   if (evt.keyCode === ESC_KEYCODE) {
-//     func();
-//   }
-// };
+var onEscDown = function (evt, func) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    func();
+  }
+};
 
 var main = document.querySelector('main');
 

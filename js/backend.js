@@ -14,7 +14,7 @@
     NOT_FOUND: 404,
   };
 
-  var TIMEOUT_IN_MS = 100;
+  var TIMEOUT_IN_MS = 10000;
 
   var errorMessage = '';
   var onError = '';
@@ -71,7 +71,7 @@
   var renderErrorMessage = function (errorMessage) {
     var message = templateError.querySelector('.error__message');
     message.textContent = errorMessage;
-    message.appendChild(errorMessage);
+    message.appendChild(window.popup.errorMessage);
     var onMessageKeydown = function (evt) {
       if (evt.key === 'Escape') {
         message.removeChild(errorMessage);
