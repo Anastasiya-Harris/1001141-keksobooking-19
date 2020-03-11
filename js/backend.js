@@ -14,7 +14,7 @@
     NOT_FOUND: 404,
   };
 
-  var TIMEOUT_IN_MS = 10000;
+  var TIMEOUT_IN_MS = 100;
 
   var setXhr = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();

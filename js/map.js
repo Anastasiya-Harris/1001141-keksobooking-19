@@ -8,7 +8,7 @@
   var PIN_WIDTH = 70;
   var MAX_ADS_COUNT = 5;
 
-  // 1) Неактивное состояние.
+  // Неактивное состояние.
   var fieldsets = document.querySelectorAll('fieldset');
   var mapFilters = document.querySelector('.map__filters');
   var adForm = document.querySelector('.ad-form');
@@ -39,7 +39,7 @@
   };
 
 
-  // 2) Переводит страницу в активный режим.
+  // Переводит страницу в активный режим.
   var removeFormDisabled = function () {
     for (var i = 0; i < fieldsets.length; i++) {
       fieldsets[i].disabled = false;
@@ -76,22 +76,18 @@
     addFormDisabled();
     disactivateMap();
     // successMessage();
-    window.popup.successMessage(successTemplate);
+    successMessage(successTemplate);
   };
 
   var onError = function (errorMessage) {
     renderErrorMessage(errorMessage);
   };
 
-  // var templateError = document.querySelector('#error').content.querySelector('.error');
-
-  // При клике на errorbutton должна ошибка должна закрыться, обработкик удатиться
-
   var renderErrorMessage = function (errorMessage) {
     var main = document.querySelector('main');
     var templateError = document.querySelector('#error').cloneNode(true).content;
     var errorText = templateError.querySelector('.error__message');
-    var errorButton = document.querySelector('.error__button');
+    var errorButton = templateError.querySelector('.error__button');
 
     errorText.textContent = errorMessage;
     main.appendChild(templateError);
@@ -119,6 +115,27 @@
     if (evt.code === ESC_KEYCODE) {
       func();
     }
+  };
+
+  var main = document.querySelector('main');
+
+  var successMessage = function (messageTemplate) {
+    var messageElement = messageTemplate.cloneNode(true);
+    main.appendChild(messageElement);
+    var messageKeydownHandler = function (evt) {
+      if (evt.key === 'Escape') {
+        main.removeChild(messageElement);
+        document.removeEventListener('keydown', messageKeydownHandler);
+      }
+    };
+    var messageClickHandler = function (evt) {
+      if (evt.target.closest('div')) {
+        main.remove(messageElement);
+        document.removeEventListener('keydown', messageClickHandler);
+      }
+    };
+    document.addEventListener('keydown', messageKeydownHandler);
+    document.addEventListener('click', messageClickHandler);
   };
 
   // Сбрасывает форму
@@ -151,7 +168,7 @@
 
   disactivateMap();
 
-  // 3) Заполнение поля адреса при mousedown на mapPinMain
+  // Заполнение поля адреса при mousedown на mapPinMain
   function updateAddress(x, y) {
     addressInput.value = x + ', ' + y;
   }
