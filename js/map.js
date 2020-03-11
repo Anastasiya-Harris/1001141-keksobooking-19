@@ -106,6 +106,10 @@
 
   var onCloseErrorBtnClick = function () {
     closeError();
+    adForm.reset();
+    disactivateMap();
+    // formReset();
+    // disactivatePage();
   };
 
   // Универсальная функция закрытия окна
