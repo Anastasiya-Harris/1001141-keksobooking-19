@@ -3,7 +3,7 @@
 
 // var ESC_KEYCODE = 'Escape';
 
-
+var mapPinTemplate = document.content.querySelector('.map__pin');
 var templateError = document.querySelector('#error').content.querySelector('.error');
 
 // var templateError = document.querySelector('#error').cloneNode(true).content;
@@ -49,6 +49,32 @@ var successMessage = function (messageTemplate) {
   document.addEventListener('keydown', messageKeydownHandler);
   document.addEventListener('click', messageClickHandler);
 };
+
+var createPinMarkup = function (pinData) {
+  var pinItem = mapPinTemplate.cloneNode(true);
+  pinItem.querySelector('img').src = pinData.author.avatar;
+  pinItem.style.left = pinData.location.x + 'px';
+  pinItem.style.top = pinData.location.y + 'px';
+  pinItem.querySelector('img').alt = pinData.offer.title;
+  var onPinItemClick = function () {
+    var mapCardRemovable = map.querySelector('.map__card');
+    if (mapCardRemovable) {
+      mapCardRemovable.remove();
+    }
+    createAd(pinData);
+  };
+  pinItem.addEventListener('click', onPinItemClick);
+  return pinItem;
+};
+
+var renderPinsMarkup = function (pinsData) {
+  var mapPinsFragment = document.createDocumentFragment();
+  pinsData.forEach(function (it) {
+    mapPinsFragment.appendChild(createPinMarkup(it));
+  });
+  mapPins.appendChild(mapPinsFragment);
+};
+
 
 window.popup = {
   successMessage: successMessage,

@@ -27,6 +27,15 @@
 
   typeOfHouseSelector.addEventListener('change', onTypeOfHouseSelectorChange);
 
+  // Установка зависимости между временем заеда и временем выезда
+  var onTimeInInputChange = function (evt) {
+    timeOutInput.value = evt.target.value;
+  };
+
+  var onTimeOutInputChange = function (evt) {
+    timeInInput.value = evt.target.value;
+  };
+
   // Валидация. Установка соответствия количества гостей (спальных мест) с количеством комнат.
   function validateRoomNumbers() {
     var roomsNumber = roomsNumberSelector.value;
@@ -44,6 +53,8 @@
     }
   }
 
+  timeOutInput.removeEventListener('change', onTimeOutInputChange);
+  timeInInput.addEventListener('change', onTimeInInputChange);
   roomsNumberSelector.addEventListener('change', validateRoomNumbers);
   capacitySelector.addEventListener('change', validateRoomNumbers);
 })();
