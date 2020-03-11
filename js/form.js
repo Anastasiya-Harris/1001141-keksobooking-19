@@ -11,6 +11,11 @@
     palace: 10000
   };
 
+  var roomsNumberSelector = document.querySelector('#room_number');
+  var capacitySelector = document.querySelector('#capacity');
+  var timeInInput = document.querySelector('#timein');
+  var timeOutInput = document.querySelector('#timeout');
+  // var adForm = document.querySelector('.ad-form');
 
   // Установки мин. цены за ночь в зависимости от типа жилья
   var onTypeOfHouseSelectorChange = function (evt) {
@@ -23,9 +28,6 @@
   typeOfHouseSelector.addEventListener('change', onTypeOfHouseSelectorChange);
 
   // Валидация. Установка соответствия количества гостей (спальных мест) с количеством комнат.
-  var roomsNumberSelector = document.querySelector('#room_number');
-  var capacitySelector = document.querySelector('#capacity');
-
   function validateRoomNumbers() {
     var roomsNumber = roomsNumberSelector.value;
     var capacity = capacitySelector.value;
