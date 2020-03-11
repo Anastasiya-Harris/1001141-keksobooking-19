@@ -1,5 +1,5 @@
 'use strict';
-// load.js — модуль, который загружает данные;
+// backend.js — модуль, который загружает данные;
 (function () {
   var Url = {
     GET: 'https://js.dump.academy/keksobooking/data/',
@@ -14,10 +14,10 @@
     NOT_FOUND: 404,
   };
 
-  var TIMEOUT_IN_MS = 100;
+  var TIMEOUT_IN_MS = 10000;
 
   var errorMessage = '';
-  var onError = '';
+  // var onError = '';
 
 
   var setXhr = function (onSuccess, onError) {
@@ -62,9 +62,8 @@
   };
 
 
-  var templateError = document.querySelector('#error').content.querySelector('.error');
-
-  // var templateError = document.querySelector('#error').cloneNode(true).content;
+  // var templateError = document.querySelector('#error').content.querySelector('.error');
+  var templateError = document.querySelector('#error').cloneNode(true).content;
   var errorButton = templateError.querySelector('.error__button');
 
   // При клике на errorbutton должна ошибка должна закрыться, обработкик удатиться
@@ -72,14 +71,15 @@
   var renderErrorMessage = function (errorMessage) {
     var errorText = templateError.querySelector('.error__message');
     errorText.textContent = errorMessage;
-    templateError.appendChild(errorMessage);
+    document.appendChild(errorMessage);
+    onCloseErrorBtnClick();
 
-    var onMessageKeydown = function (evt) {
-      if (evt.key === 'Escape') {
-        message.removeChild(errorMessage);
-        document.removeEventListener('keydown', onMessageKeydown);
-      }
-    };
+    // var onMessageKeydown = function (evt) {
+    //   if (evt.key === 'Escape') {
+    //     message.removeChild(errorMessage);
+    //     document.removeEventListener('keydown', onMessageKeydown);
+    //   }
+    // };
   };
 
   var onError = function (errorMessage) {
@@ -103,7 +103,7 @@
 
   errorButton.addEventListener('click', onCloseErrorBtnClick);
 
-
+  // Универсальная функция закрытия окна
   var ESC_KEYCODE = 'Escape';
 
   var onEscDown = function (evt, func) {
