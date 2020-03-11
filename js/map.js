@@ -79,12 +79,54 @@
     window.popup.successMessage(successTemplate);
   };
 
+  var onError = function (errorMessage) {
+    renderErrorMessage(errorMessage);
+  };
+
+  // var templateError = document.querySelector('#error').content.querySelector('.error');
+
+  // При клике на errorbutton должна ошибка должна закрыться, обработкик удатиться
+
+  var renderErrorMessage = function (errorMessage) {
+    var main = document.querySelector('main');
+    var templateError = document.querySelector('#error').cloneNode(true).content;
+    var errorText = templateError.querySelector('.error__message');
+    var errorButton = document.querySelector('.error__button');
+
+    errorText.textContent = errorMessage;
+    main.appendChild(templateError);
+    document.addEventListener('keydown', onMessageKeydown, {once: true});
+    errorButton.addEventListener('click', onCloseErrorBtnClick, {once: true});
+  };
+
+  var onMessageKeydown = function (evt) {
+    onEscDown(evt, closeError);
+  };
+
+  var closeError = function () {
+    var errorMessage = document.querySelector('.error');
+    errorMessage.remove();
+  };
+
+  var onCloseErrorBtnClick = function () {
+    closeError();
+  };
+
+  // Универсальная функция закрытия окна
+  var ESC_KEYCODE = 'Escape';
+
+  var onEscDown = function (evt, func) {
+    if (evt.code === ESC_KEYCODE) {
+      func();
+    }
+  };
+
   // Сбрасывает форму
   var formReset = function (evt) {
-    window.backend.upload(new FormData(adForm), function (response) {
+    window.backend.upload(new FormData(adForm), function () {
       adForm.reset();
       disactivatePage();
-    });
+    }, onError);
 
     evt.preventDefault();
     mapPinMain.addEventListener('click', onMainPinMousedown, {once: true});
@@ -103,7 +145,7 @@
 
 
   var activateMap = function () {
-    window.backend.load(onSuccess, window.backend.onError);
+    window.backend.load(onSuccess, onError);
     removeDisabled();
   };
 
@@ -140,24 +182,11 @@
   mapPinMain.addEventListener('click', onMainPinMousedown, {once: true});
 
 
-  // 1 Доработайте обработчик отправки формы, так чтобы он отменял действие по умолчанию preventDefault
-  // и отправлял данные формы на сервер посредством XHR https://js.dump.academy/keksobooking.
-
-  // 2 После успешной передачи данных на сервер верните страницу в неактивное состояние и сбросьте форму.
-
-  // 3 Если отправка данных прошла успешно, показывается сообщение #success внутри шаблона template.
-  // Сообщение должно исчезать по Esc и по клику на произвольную область экрана.
-
-  // 4 Если произошла ошибка запроса, покажите в main сообщение #error в шаблоне template,
-  // Сообщение должно исчезать после нажатия на кнопку .error__button, по нажатию на клавишу Esc и по клику на произвольную область экрана.
-
-  // 5 Добавьте обработчик кнопке очистки формы.
   window.map = {
     PIN_HEIGHT: PIN_HEIGHT,
     PIN_WIDTH: PIN_WIDTH,
     disactivateMap: disactivateMap,
     addMapDisabled: addMapDisabled,
     onSuccess: onSuccess,
-    // onError: onError,
   };
 })();
