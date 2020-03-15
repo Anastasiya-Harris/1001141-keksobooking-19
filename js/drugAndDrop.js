@@ -9,16 +9,44 @@
   // window.map.setInitialAddress / // Координаты дефолтной метки по указателю
 
 
-  mapPinMain.addEventListener('mousedown', getCoordinate, {once: true});
-
-  var getCoordinate = function (evt) {
+  mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
-    window.addEventListener('mousemove', getCoordinate, {once: true});
-    mapPinMain.addEventListener('mouseup');
-  };
+
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY,
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
+      mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+  });
 
 
-  window.drugAndDrop = {
-    getCoordinate: getCoordinate,
-  };
+  // window.drugAndDrop = {
+  //   getCoordinate: getCoordinate,
+  // };
 })();
