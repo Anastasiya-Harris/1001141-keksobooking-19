@@ -13,9 +13,7 @@
 
   var roomsNumberSelector = document.querySelector('#room_number');
   var capacitySelector = document.querySelector('#capacity');
-  var timeInInput = document.querySelector('#timein');
-  var timeOutInput = document.querySelector('#timeout');
-  // var adForm = document.querySelector('.ad-form');
+
 
   // Установки мин. цены за ночь в зависимости от типа жилья
   var onTypeOfHouseSelectorChange = function (evt) {

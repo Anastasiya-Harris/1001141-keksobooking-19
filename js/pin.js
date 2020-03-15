@@ -11,6 +11,13 @@
     pinElement.querySelector('img').src = ad.author.avatar;
     pinElement.querySelector('img').alt = ad.offer.title;
 
+    pinElement.addEventListener('click', function (evt) {
+      window.popup.closePopup();
+      window.popup.renderPopup(ad);
+
+      evt.currentTarget.classList.add('map__pin--active');
+    });
+
     return pinElement;
   };
 

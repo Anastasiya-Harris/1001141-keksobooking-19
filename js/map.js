@@ -8,7 +8,7 @@
   var PIN_WIDTH = 70;
   var MAX_ADS_COUNT = 5;
 
-  // 1) Неактивное состояние.
+  // Неактивное состояние.
   var fieldsets = document.querySelectorAll('fieldset');
   var mapFilters = document.querySelector('.map__filters');
   var adForm = document.querySelector('.ad-form');
@@ -39,7 +39,7 @@
   };
 
 
-  // 2) Переводит страницу в активный режим.
+  // Переводит страницу в активный режим.
   var removeFormDisabled = function () {
     for (var i = 0; i < fieldsets.length; i++) {
       fieldsets[i].disabled = false;
@@ -76,15 +76,76 @@
     addFormDisabled();
     disactivateMap();
     // successMessage();
-    window.popup.successMessage(successTemplate);
+    successMessage(successTemplate);
+  };
+
+  var onError = function (errorMessage) {
+    renderErrorMessage(errorMessage);
+  };
+
+  var renderErrorMessage = function (errorMessage) {
+    var main = document.querySelector('main');
+    var templateError = document.querySelector('#error').cloneNode(true).content;
+    var errorText = templateError.querySelector('.error__message');
+    var errorButton = templateError.querySelector('.error__button');
+
+    errorText.textContent = errorMessage;
+    main.appendChild(templateError);
+    document.addEventListener('keydown', onMessageKeydown, {once: true});
+    errorButton.addEventListener('click', onCloseErrorBtnClick, {once: true});
+  };
+
+  var onMessageKeydown = function (evt) {
+    onEscDown(evt, closeError);
+  };
+
+  var closeError = function () {
+    var errorMessage = document.querySelector('.error');
+    errorMessage.remove();
+  };
+
+  var onCloseErrorBtnClick = function () {
+    closeError();
+    adForm.reset();
+    disactivateMap();
+  };
+
+  // Универсальная функция закрытия окна///////////////вынести в отдельный модуль!!!
+  var ESC_KEYCODE = 'Escape';
+
+  var onEscDown = function (evt, func) {
+    if (evt.code === ESC_KEYCODE) {
+      func();
+    }
+  };
+
+  var main = document.querySelector('main');
+
+  var successMessage = function (messageTemplate) {
+    var messageElement = messageTemplate.cloneNode(true);
+    main.appendChild(messageElement);
+    var messageKeydownHandler = function (evt) {
+      if (evt.key === 'Escape') {
+        main.removeChild(messageElement);
+        document.removeEventListener('keydown', messageKeydownHandler);
+      }
+    };
+    var messageClickHandler = function (evt) {
+      if (evt.target.closest('div')) {
+        main.remove(messageElement);
+        document.removeEventListener('keydown', messageClickHandler);
+      }
+    };
+    document.addEventListener('keydown', messageKeydownHandler);
+    document.addEventListener('click', messageClickHandler);
   };
 
   // Сбрасывает форму
   var formReset = function (evt) {
-    window.backend.upload(new FormData(adForm), function (response) {
+    window.backend.upload(new FormData(adForm), function () {
       adForm.reset();
       disactivatePage();
-    });
+    }, onError);
 
     evt.preventDefault();
     mapPinMain.addEventListener('click', onMainPinMousedown, {once: true});
@@ -103,13 +164,13 @@
 
 
   var activateMap = function () {
-    window.backend.load(onSuccess, window.backend.onError);
+    window.backend.load(onSuccess, onError);
     removeDisabled();
   };
 
   disactivateMap();
 
-  // 3) Заполнение поля адреса при mousedown на mapPinMain
+  // Заполнение поля адреса при mousedown на mapPinMain
   function updateAddress(x, y) {
     addressInput.value = x + ', ' + y;
   }
@@ -140,24 +201,12 @@
   mapPinMain.addEventListener('click', onMainPinMousedown, {once: true});
 
 
-  // 1 Доработайте обработчик отправки формы, так чтобы он отменял действие по умолчанию preventDefault
-  // и отправлял данные формы на сервер посредством XHR https://js.dump.academy/keksobooking.
-
-  // 2 После успешной передачи данных на сервер верните страницу в неактивное состояние и сбросьте форму.
-
-  // 3 Если отправка данных прошла успешно, показывается сообщение #success внутри шаблона template.
-  // Сообщение должно исчезать по Esc и по клику на произвольную область экрана.
-
-  // 4 Если произошла ошибка запроса, покажите в main сообщение #error в шаблоне template,
-  // Сообщение должно исчезать после нажатия на кнопку .error__button, по нажатию на клавишу Esc и по клику на произвольную область экрана.
-
-  // 5 Добавьте обработчик кнопке очистки формы.
   window.map = {
     PIN_HEIGHT: PIN_HEIGHT,
     PIN_WIDTH: PIN_WIDTH,
+    onEscDown: onEscDown,
     disactivateMap: disactivateMap,
     addMapDisabled: addMapDisabled,
     onSuccess: onSuccess,
-    // onError: onError,
   };
 })();
