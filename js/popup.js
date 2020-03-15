@@ -4,6 +4,7 @@
 (function () {
   var template = document.querySelector('#card').content.querySelector('.map__card');
   var map = document.querySelector('.map');
+  var popup = map.querySelector('.popup');
 
   var removeActiveClass = function () {
     var activePin = map.querySelector('.map__pin--active');
@@ -14,12 +15,9 @@
   };
 
   var closePopup = function () {
-    var popup = map.querySelector('.popup');
-
     if (popup) {
       popup.remove();
     }
-
     removeActiveClass();
   };
 
