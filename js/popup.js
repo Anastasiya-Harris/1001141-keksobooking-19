@@ -1,53 +1,89 @@
 'use strict';
 // Popup.js — модуль, который работает с формой.
 
-var mapPins = document.querySelector('.map__pins');
-var pins = document.querySelectorAll('.map__pin');
-var template = document.querySelector('#card').content.querySelector('.map__card');
+(function () {
+  var template = document.querySelector('#card').content.querySelector('.map__card');
+  var map = document.querySelector('.map');
 
-var renderPopup = function () {
-  var popupElement = template.cloneNode(true);
-  return popupElement;
-};
+  var removeActiveClass = function () {
+    var activePin = map.querySelector('.map__pin--active');
 
-// var createPinMarkup = function (pinData) {
-//   var pinItem = mapPinTemplate.cloneNode(true);
-//   pinItem.querySelector('img').src = pinData.author.avatar;
-//   pinItem.style.left = pinData.location.x + 'px';
-//   pinItem.style.top = pinData.location.y + 'px';
-//   pinItem.querySelector('img').alt = pinData.offer.title;
-//   var onPinItemClick = function () {
-//     var mapCardRemovable = map.querySelector('.map__card');
-//     if (mapCardRemovable) {
-//       mapCardRemovable.remove();
-//     }
-//     createAd(pinData);
-//   };
-//   pinItem.addEventListener('click', onPinItemClick);
-//   return pinItem;
-// };
+    if (activePin) {
+      activePin.classList.remove('map__pin--active');
+    }
+  };
 
-var renderPins = function () {
-  var fragment = document.createDocumentFragment();
-  mapPins.appendChild(fragment);
-};
+  var closePopup = function () {
+    var popup = map.querySelector('.popup');
 
-pins.addEventListener('click', renderPins);
+    if (popup) {
+      popup.remove();
+    }
+
+    removeActiveClass();
+  };
+
+  // Создаёт DOM-элемент карточки объявления на карте
+  var renderPopup = function (pin) {
+    var popupElement = template.cloneNode(true);
 
 
-// var renderPinsMarkup = function (pinsData) {
-//   var mapPinsFragment = document.createDocumentFragment();
-//   pinsData.forEach(function (it) {
-//     mapPinsFragment.appendChild(createPinMarkup(it));
-//   });
-//   mapPins.appendChild(mapPinsFragment);
-// };
+    popupElement.querySelector('img').src = pin.author.avatar;
+
+    popupElement.querySelector('.popup__title').textContent = pin.offer.title;
+    popupElement.querySelector('.popup__text--address').textContent = pin.offer.address;
+    popupElement.querySelector('.popup__text--price').textContent = pin.offer.price;
+    popupElement.querySelector('.popup__description').textContent = pin.offer.description;
+    popupElement.querySelector('.popup__type').textContent = pin.offer.type;
+    popupElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
+    popupElement.querySelector('.popup__text--capacity').textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests + ' гостей';
+
+    // Получает список удобств, готовит шаблон удобств, удаляет список
+    var features = popupElement.querySelectorAll('.popup__feature');
+
+    // если в объявлении есть удобства, добавляем их в зачищенный список,
+    // иначе удаляем его из разметки
+    for (var i = 0; i < features.length; i++) {
+      if (pin.offer.features.indexOf(features[i].classList[1].replace('popup__feature--', '')) === -1) {
+        features[i].remove();
+      }
+    }
+
+    var photo = popupElement.querySelector('.popup__photos');
+    photo.innerHTML = '';
+
+    for (i = 0; i < pin.offer.photos.length; i++) {
+      var img = document.createElement('img');
+      img.src = pin.offer.photos[i];
+      img.alt = 'Фотография жилья';
+      img.width = 45;
+      img.height = 40;
+      img.classList.add('popup__photo');
+
+      photo.appendChild(img);
+    }
+
+    var buttonClose = popupElement.querySelector('.popup__close');
+    buttonClose.addEventListener('click', closePopup, {once: true});
 
 
-window.popup = {
-  // successMessage: successMessage,
-  // // onError: onError,
-};
+    var onCardEscKeyDown = function (evt) {
+      window.map.onEscDown(evt, closePopup);
+    };
+
+
+    var filterContainer = map.querySelector('.map__filters-container');
+
+    filterContainer.before(popupElement);
+    // return popupElement;
+    document.addEventListener('keydown', onCardEscKeyDown);
+  };
+
+  window.popup = {
+    renderPopup: renderPopup,
+    closePopup: closePopup,
+  };
+})();
 
 // 1 Отрисуйте сгенерированные DOM-элементы в блок .map__pins.
 // Для вставки элементов используйте DocumentFragment.

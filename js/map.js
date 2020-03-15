@@ -108,11 +108,9 @@
     closeError();
     adForm.reset();
     disactivateMap();
-    // formReset();
-    // disactivatePage();
   };
 
-  // Универсальная функция закрытия окна
+  // Универсальная функция закрытия окна///////////////вынести в отдельный модуль!!!
   var ESC_KEYCODE = 'Escape';
 
   var onEscDown = function (evt, func) {
@@ -206,6 +204,7 @@
   window.map = {
     PIN_HEIGHT: PIN_HEIGHT,
     PIN_WIDTH: PIN_WIDTH,
+    onEscDown: onEscDown,
     disactivateMap: disactivateMap,
     addMapDisabled: addMapDisabled,
     onSuccess: onSuccess,
