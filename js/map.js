@@ -208,6 +208,6 @@
     onEscDown: onEscDown,
     disactivateMap: disactivateMap,
     addMapDisabled: addMapDisabled,
-    onSuccess: onSuccess,
+    // onSuccess: onSuccess,
   };
 })();
