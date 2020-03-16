@@ -1,7 +1,8 @@
 'use strict';
 
 (function () {
-  var filters = document.querySelector(.map__filters-container);
+  var filters = document.querySelector('.map__filters');
+  var typeOFHouse = filters.querySelector('.housing-type');
 
 })();
 
