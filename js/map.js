@@ -204,9 +204,10 @@
   window.map = {
     PIN_HEIGHT: PIN_HEIGHT,
     PIN_WIDTH: PIN_WIDTH,
+    setCurrentAddress: setCurrentAddress,
     onEscDown: onEscDown,
     disactivateMap: disactivateMap,
     addMapDisabled: addMapDisabled,
-    onSuccess: onSuccess,
+    // onSuccess: onSuccess,
   };
 })();
