@@ -3,6 +3,8 @@
 (function () {
   var filters = document.querySelector('.map__filters');
   var typeOFHouse = filters.querySelector('#housing-type');
+  var adverts = [];
+  var advertsData = [];
 
   var ontypeOFHouseChange = function () {
     var getValue = typeOFHouse.value;
@@ -11,6 +13,52 @@
   };
 
   typeOFHouse.addEventListener('change', ontypeOFHouseChange);
+
+  // window.map.activateMap
+
+  var activateMap = function () {
+    window.backend.setXhr(onSuccess, onError);
+  };
+
+  var getSortedArray = function (array) {
+    return array.sort(function () {
+      return 0.5 - Math.random();
+    });
+  };
+
+  var onLoad = function (data) {
+    advertsData = data;
+    window.pins.render(getSortedArray(advertsData));
+  };
+
+  var onError = function (errorMassage) {
+    window.messages.error(errorMassage);
+  };
+
+  var getHousingType = function (advert) {
+    return typeOFHouse.value === 'any' ? true : advert.offer.type === typeOFHouse.value;
+  };
+
+  var filtrate = function () {
+    adverts = advertsData.slice(0);
+    adverts = adverts.filter(function (advert) {
+      return getHousingType(advert) && getHousingPrice(advert) && getHousingRooms(advert) && getHousingGuests(advert) && getHousingFeatures(advert);
+    });
+  };
+
+  // var getHousingPrice = function (advert) {
+  //   switch (housingPrice.value) {
+  //     case ('low'):
+  //       return advert.offer.price < HOUSING__PRICE.lowMax;
+
+  //     case ('middle'):
+  //       return advert.offer.price >= HOUSING__PRICE.middleMin && advert.offer.price < HOUSING__PRICE.middleMax;
+
+  //     case ('high'):
+  //       return advert.offer.price >= HOUSING__PRICE.hightMin;
+  //   }
+  //   return true;
+  // };
 
 
   // var filterType = function (item) {
@@ -44,7 +92,6 @@
   //   }
   //   window.map.mapSection.appendChild(fragment);
   // };
-
 
 
   // typeOFHouse.onchange
