@@ -60,10 +60,13 @@
   };
 
   var onSuccess = function (ads) {
-    if (ads.length > MAX_ADS_COUNT) {
-      var adsResalt = ads.splice(0, MAX_ADS_COUNT);
-      window.pin.renderPins(adsResalt);
-    }
+
+    window.filter.getSortedArray(ads);
+    // if (ads.length > MAX_ADS_COUNT) {
+    //   var adsResalt = ads.splice(0, MAX_ADS_COUNT);
+    //   window.pin.renderPins(adsResalt);
+    // }
+    window.pin.renderPins(ads);
   };
 
   var successTemplate = document.querySelector('#success').content.querySelector('.success');
