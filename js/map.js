@@ -61,12 +61,11 @@
 
   var onSuccess = function (ads) {
 
-    // window.filter.getSortedArray(ads);
     if (ads.length > MAX_ADS_COUNT) {
       var adsResalt = ads.splice(0, MAX_ADS_COUNT);
       window.pin.renderPins(adsResalt);
     }
-    // onSortPins();
+    // window.filter.onSortPins(ads);
 
     window.pin.renderPins(ads);
   };

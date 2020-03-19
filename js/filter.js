@@ -45,6 +45,7 @@
   // функция сортировке по кол-ву комнат
 
   var filterRooms = function (data) {
+    debugger;
     var it = +housingRooms.value;
     var count = +data.offer.rooms;
     return it === count || housingRooms.value === 'any';
@@ -61,7 +62,7 @@
   // сортировка по удобствам
 
   var filterFeatures = function (data) {
-
+    debugger;
     // преобразованный массив удобств из псевдо масива
     // на псевдо массиве не работает every и т.п.
 
@@ -85,14 +86,14 @@
   };
 
   // Фильтр данных
-  var onSortPins = function () {
-    console.log(1)
+  var onSortPins = function (data) {
+
     debugger;
     // скрываем открытую карточку обьявдения
-    var mapCard = document.querySelector('.map__card');
-    if (mapCard) {
-      mapCard.classList.add('visually-hidden');
-    }
+    // var mapCard = document.querySelector('.map__card');
+    // if (mapCard) {
+    //   mapCard.classList.add('visually-hidden');
+    // }
     // чистим то что до этого нарисовали
     window.pin.removePins();
 
@@ -101,9 +102,11 @@
     //   pins.remove();
     // });
     var i = 0;
+
     var housingCopy = [];
     while (i < housing.length && housingCopy.length < 5) {
-      var data = housing[i];
+      debugger;
+      data = housing[i];
       if (filterType(data) && filterPriceMiddle(data) && filterRooms(data) && filterGuest(data) && filterFeatures(data)) {
         housingCopy.push(data);
       }
@@ -114,7 +117,23 @@
     window.pin.renderPins(housingCopy);
   };
 
-  mapFilters.addEventListener('change', window.debounce.debounce(onSortPins));
+  var startFilter = function () {
+    window.debounce.debounce(onSortPins);
+  };
+
+  mapFilters.addEventListener('change', startFilter());
+
+
+  // var onFilterChange = window.debounce.debounce(function () {
+  //   filteredData = data.slice(0);
+  //   filteredData = filteredData.filter(filterType).filter(filterPriceMiddle).filter(filterRooms).filter(filterGuest).filter(filterFeatures);
+  //   window.pin.removePins();
+  //   window.popup.closePopup();
+  //   // window.map.renderPinsMarkup(filteredData.slice(0, PINS_LIMIT));
+  // });
+  // mapFilters.addEventListener('change', onFilterChange);
+  // onSortPins();
+
 
   // onSortPins();
   window.filter = {
@@ -123,144 +142,3 @@
   };
 })();
 
-// (function () {
-//   var MAX_ADS_COUNT = 5;
-
-//   var PriceRange = {
-//     LOW: {
-//       MIN: 0,
-//       MAX: 10000
-//     },
-//     MIDDLE: {
-//       MIN: 10000,
-//       MAX: 50000
-//     },
-//     HIGH: {
-//       MIN: 50000,
-//       MAX: Infinity
-//     }
-//   };
-
-//   var filter = document.querySelector('.map__filters');
-//   var filterItems = filter.querySelectorAll('select, input');
-//   var typeOFHouse = filter.querySelector('#housing-type');
-//   var priceSelect = filter.querySelector('#housing-price');
-//   var quantityOfRooms = filter.querySelector('#housing-rooms');
-//   var quantityOfGuests = filter.querySelector('#housing-guests');
-//   var features = filter.querySelector('#housing-features');
-//   var data = [];
-//   var filteredData = [];
-
-//   var filtrationItem = function (it, item, key) {
-//     return it.value === 'any' ? true : it.value === item[key].toString();
-//   };
-
-//   var filtrationByType = function (item) {
-//     return filtrationItem(typeOFHouse, item.offer, 'type');
-//   };
-
-//   var filtrationByPrice = function (item) {
-//     var filteringPrice = PriceRange[priceSelect.value.toUpperCase()];
-//     return filteringPrice ? item.offer.price >= filteringPrice.MIN && item.offer.price <= filteringPrice.MAX : true;
-//   };
-
-//   var filtrationByRooms = function (item) {
-//     return filtrationItem(quantityOfRooms, item.offer, 'rooms');
-//   };
-
-//   var filtrationByGuests = function (item) {
-//     return filtrationItem(quantityOfGuests, item.offer, 'guests');
-//   };
-
-//   var filtrationByFeatures = function (item) {
-//     var checkedFeaturesItems = features.querySelectorAll('input:checked');
-//     return Array.from(checkedFeaturesItems).every(function (element) {
-//       return item.offer.features.includes(element.value);
-//     });
-//   };
-
-//   var onFilterChange = window.debounce.debounce(function () {
-//     debugger;
-//     filteredData = data.slice(0);
-//     filteredData = filteredData.filter(filtrationByType).filter(filtrationByPrice).filter(filtrationByRooms).filter(filtrationByGuests).filter(filtrationByFeatures);
-//     window.pin.removePins();
-//     window.popup.closePopup();
-//     // window.map.renderPinsMarkup(filteredData.slice(0, MAX_ADS_COUNT));
-//   });
-
-//   // Дизейбл для форм
-//   var activateFilter = function () {
-//     filterItems.forEach(function (it) {
-//       it.disabled = false;
-//     });
-//     onFilterChange();
-//     debugger;
-//     filter.addEventListener('change', onFilterChange);
-//   };
-
-//   var resetFilter = function () {
-//     filterItems.forEach(function (it) {
-//       it.value = 'any';
-//     });
-//     var featuresItems = features.querySelectorAll('input');
-//     featuresItems.forEach(function (feature) {
-//       feature.checked = false;
-//     });
-//   };
-
-//   var deactivateFilter = function () {
-//     filterItems.forEach(function (it) {
-//       it.disabled = true;
-//     });
-//     resetFilter();
-//     filter.removeEventListener('change', onFilterChange);
-//   };
-
-//   var activateFiltration = function (adData) {
-//     data = adData.slice(0);
-//     activateFilter();
-//     return adData.slice(0, MAX_ADS_COUNT);
-//   };
-
-//   var deactivateFiltration = function () {
-//     deactivateFilter();
-//   };
-
-//   window.filter = {
-//     activate: activateFiltration,
-//     deactivate: deactivateFiltration
-//   };
-// })();
-
-
-// 'use strict';
-
-// (function () {
-//   var filters = document.querySelector('.map__filters');
-//   var typeOFHouse = filters.querySelector('#housing-type');
-//   var adverts = [];
-//   var advertsData = [];
-
-//   var ontypeOFHouseChange = function () {
-//     var getValue = typeOFHouse.value;
-//     // console.log(getValue);
-//     alert(getValue);
-//   };
-
-//   var valueToAnotherValue = {
-//     'palace': 'palace',
-//     'flat': 'flat',
-//     'house': 'house',
-//     'bungalo': 'bungalo',
-//   };
-
-//   var onSuccess = function (ads) {
-//     advertsData = ads;
-//     window.pins.render(getSortedArray(advertsData));
-//   };
-
-//   var getSortedArray = ads.filter(function (ads) {
-//     return ads.offer.type === 'prop';
-//   });
-
-//   typeOFHouse.addEventListener('change', ontypeOFHouseChange);

@@ -66,6 +66,7 @@
 
 
     var onCardEscKeyDown = function (evt) {
+      debugger;
       window.map.onEscDown(evt, closePopup);
     };
 

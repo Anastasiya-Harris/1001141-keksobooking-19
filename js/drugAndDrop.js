@@ -64,8 +64,14 @@
         x: mapPinMainPosition.x + Math.ceil(window.map.PIN_WIDTH / 2),
         y: mapPinMainPosition.y + window.map.PIN_HEIGHT + window.map.PIN_HEIGHT
       };
+// debugger;
 
-      window.form.setAddress(pinTailCoords);
+      var setAddress = function (coords) {
+        var addressInput = document.querySelector('#address');
+        addressInput.value = coords.x + ', ' + coords.y;
+      };
+
+      setAddress(pinTailCoords);
     };
 
     var onMouseUp = function (upEvt) {
