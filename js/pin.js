@@ -22,6 +22,7 @@
   };
 
   var renderPins = function (ads) {
+
     var map = document.querySelector('.map');
     var fragment = document.createDocumentFragment();
 
@@ -30,6 +31,7 @@
     }
     // Вставляем фрагмент в .map__pins
     map.appendChild(fragment);
+
   };
 
   var removePins = function () {
