@@ -45,7 +45,6 @@
   // функция сортировке по кол-ву комнат
 
   var filterRooms = function (data) {
-    debugger;
     var it = +housingRooms.value;
     var count = +data.offer.rooms;
     return it === count || housingRooms.value === 'any';
@@ -62,7 +61,6 @@
   // сортировка по удобствам
 
   var filterFeatures = function (data) {
-    debugger;
     // преобразованный массив удобств из псевдо масива
     // на псевдо массиве не работает every и т.п.
 
@@ -89,18 +87,9 @@
   var onSortPins = function (data) {
 
     debugger;
-    // скрываем открытую карточку обьявдения
-    // var mapCard = document.querySelector('.map__card');
-    // if (mapCard) {
-    //   mapCard.classList.add('visually-hidden');
-    // }
-    // чистим то что до этого нарисовали
+
     window.pin.removePins();
 
-    // var deletePins = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
-    // deletePins.forEach(function (pins) {
-    //   pins.remove();
-    // });
     var i = 0;
 
     var housingCopy = [];
@@ -117,11 +106,11 @@
     window.pin.renderPins(housingCopy);
   };
 
-  var startFilter = function () {
-    window.debounce.debounce(onSortPins);
-  };
+  // var startFilter = function () {
+  //   window.debounce.debounce(onSortPins);
+  // };
 
-  mapFilters.addEventListener('change', startFilter());
+  mapFilters.addEventListener('change', window.debounce.debounce(onSortPins));
 
 
   // var onFilterChange = window.debounce.debounce(function () {
@@ -129,7 +118,7 @@
   //   filteredData = filteredData.filter(filterType).filter(filterPriceMiddle).filter(filterRooms).filter(filterGuest).filter(filterFeatures);
   //   window.pin.removePins();
   //   window.popup.closePopup();
-  //   // window.map.renderPinsMarkup(filteredData.slice(0, PINS_LIMIT));
+  //
   // });
   // mapFilters.addEventListener('change', onFilterChange);
   // onSortPins();
