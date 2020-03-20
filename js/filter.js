@@ -79,10 +79,16 @@
   };
 
   var closePopup = function () {
-    var mapCard = document.querySelector('.map__card');
-    if (mapCard) {
-      mapCard.classList.add('visually-hidden');
+
+    var popup = document.querySelector('.popup');
+    if (popup) {
+      popup.remove();
     }
+
+    // var mapCard = document.querySelector('.map__card');
+    // if (mapCard) {
+    //   mapCard.classList.add('visually-hidden');
+    // }
   };
 
   var deletePin = function () {

@@ -149,20 +149,30 @@
   var successMessage = function (messageTemplate) {
     var messageElement = messageTemplate.cloneNode(true);
     main.appendChild(messageElement);
-    var messageKeydownHandler = function (evt) {
+    document.addEventListener('keydown', onMessageClick);
+
+    var onSuccesMessageKeydown = function (evt) {
       if (evt.key === 'Escape') {
         main.removeChild(messageElement);
-        document.removeEventListener('keydown', messageKeydownHandler);
+        document.removeEventListener('keydown', onSuccesMessageKeydown);
       }
     };
-    var messageClickHandler = function (evt) {
-      if (evt.target.closest('div')) {
-        main.remove(messageElement);
-        document.removeEventListener('keydown', messageClickHandler);
-      }
-    };
-    document.addEventListener('keydown', messageKeydownHandler);
-    document.addEventListener('click', messageClickHandler);
+    // var onMessageClick = function (evt) {
+    //   if (evt.target.closest('div')) {
+    //     main.remove(messageElement);
+    //     document.removeEventListener('keydown', onMessageClick);
+    //   }
+    // };
+    document.addEventListener('keydown', onSuccesMessageKeydown);
+    document.addEventListener('click', onMessageClick);
+  };
+
+  var onMessageClick = function (evt) {
+    var success = document.querySelector('.success');
+    if (evt.target !== successMessage) {
+      success.classList.add('hidden');
+      document.removeEventListener('keydown', onMessageClick);
+    }
   };
 
   // Сбрасывает форму

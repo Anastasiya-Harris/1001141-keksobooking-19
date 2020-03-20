@@ -4,18 +4,18 @@
 (function () {
   var template = document.querySelector('#card').content.querySelector('.map__card');
   var map = document.querySelector('.map');
-  var popup = map.querySelector('.popup');
 
-  var removeActiveClass = function () {
-    var activePin = map.querySelector('.map__pin--active');
 
-    if (activePin) {
-      activePin.classList.remove('map__pin--active');
-    }
-  };
+  // var removeActiveClass = function () {
+  //   var activePin = map.querySelector('.map__pin--active');
+
+  //   if (activePin) {
+  //     activePin.classList.remove('map__pin--active');
+  //   }
+  // };
 
   // var closePopup = function () {
-
+  //   var popup = map.querySelector('.popup');
   //   // console.log(popup);
   //   if (popup) {
   //     popup.remove();
@@ -89,7 +89,7 @@
     var filterContainer = map.querySelector('.map__filters-container');
 
     filterContainer.before(popupElement);
-    // return popupElement;
+
     document.addEventListener('keydown', onCardEscKeyDown);
   };
 
