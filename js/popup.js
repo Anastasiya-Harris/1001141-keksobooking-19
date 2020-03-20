@@ -15,6 +15,7 @@
   };
 
   var closePopup = function () {
+    debugger;
     if (popup) {
       popup.remove();
     }
@@ -62,10 +63,12 @@
     }
 
     var buttonClose = popupElement.querySelector('.popup__close');
+    debugger;
     buttonClose.addEventListener('click', closePopup, {once: true});
 
 
     var onCardEscKeyDown = function (evt) {
+      debugger;
       window.map.onEscDown(evt, closePopup);
     };
 
@@ -82,13 +85,3 @@
     closePopup: closePopup,
   };
 })();
-
-// 1 Отрисуйте сгенерированные DOM-элементы в блок .map__pins.
-// Для вставки элементов используйте DocumentFragment.
-
-// 2 На основе первого по порядку элемента из сгенерированного массива и шаблона #card
-// создайте DOM-элемент объявления (карточка объявления), заполните его данными из объекта:
-
-// 3 Если данных для заполнения не хватает, соответствующий блок в карточке скрывается.
-
-// Вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container.

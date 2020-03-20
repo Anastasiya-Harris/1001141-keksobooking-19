@@ -6,7 +6,7 @@
   var MAIN_PIN_WIDTH = 156;
   var PIN_HEIGHT = 50;
   var PIN_WIDTH = 70;
-  var MAX_ADS_COUNT = 5;
+  // var MAX_ADS_COUNT = 5;
 
   // Неактивное состояние.
   var fieldsets = document.querySelectorAll('fieldset');
@@ -14,6 +14,26 @@
   var adForm = document.querySelector('.ad-form');
   var map = document.querySelector('.map');
   var adFormResetButton = adForm.querySelector('.ad-form__reset');
+
+  var loadedAdvertisings = [];
+
+  var onChangeFilter = function () {
+    window.filter.onSortPins(loadedAdvertisings);
+    // onCardEscKeyDown();
+    // закрывать открытую карточку объявления
+    // window.popup.closePopup();
+  };
+
+
+  var debounceOnSortPins = window.debounce.debounce(onChangeFilter);
+
+  var startFilter = function () {
+    mapFilters.addEventListener('change', debounceOnSortPins);
+  };
+
+  var stopFilter = function () {
+    mapFilters.removeEventListener('change', debounceOnSortPins);
+  };
 
 
   var addFormDisabled = function () {
@@ -60,10 +80,16 @@
   };
 
   var onSuccess = function (ads) {
-    if (ads.length > MAX_ADS_COUNT) {
-      var adsResalt = ads.splice(0, MAX_ADS_COUNT);
-      window.pin.renderPins(adsResalt);
-    }
+    loadedAdvertisings = ads;
+    window.filter.onSortPins(loadedAdvertisings);
+    startFilter();
+    // if (ads.length > MAX_ADS_COUNT) {
+    //   var adsResalt = ads.splice(0, MAX_ADS_COUNT);
+    //   window.pin.renderPins(adsResalt);
+    // }
+    // window.filter.onSortPins(ads);
+
+    // window.pin.renderPins(ads);
   };
 
   var successTemplate = document.querySelector('#success').content.querySelector('.success');
@@ -77,6 +103,7 @@
     disactivateMap();
     // successMessage();
     successMessage(successTemplate);
+    stopFilter();
   };
 
   var onError = function (errorMessage) {
@@ -118,6 +145,10 @@
       func();
     }
   };
+
+  // var onCardEscKeyDown = function (evt) {
+  //   onEscDown(evt, window.popup.closePopup);
+  // };
 
   var main = document.querySelector('main');
 
