@@ -4,29 +4,30 @@
 (function () {
   var template = document.querySelector('#card').content.querySelector('.map__card');
   var map = document.querySelector('.map');
-  var popup = map.querySelector('.popup');
 
-  var removeActiveClass = function () {
-    var activePin = map.querySelector('.map__pin--active');
 
-    if (activePin) {
-      activePin.classList.remove('map__pin--active');
-    }
-  };
+  // var removeActiveClass = function () {
+  //   var activePin = map.querySelector('.map__pin--active');
 
-  var closePopup = function () {
-    debugger;
-    if (popup) {
-      popup.remove();
-    }
-    removeActiveClass();
-  };
+  //   if (activePin) {
+  //     activePin.classList.remove('map__pin--active');
+  //   }
+  // };
+
+  // var closePopup = function () {
+  //   var popup = map.querySelector('.popup');
+  //   // console.log(popup);
+  //   if (popup) {
+  //     popup.remove();
+  //   }
+  //   // debugger;
+  //   removeActiveClass();
+  // };
 
   // Создаёт DOM-элемент карточки объявления на карте
   var renderPopup = function (pin) {
     var popupElement = template.cloneNode(true);
-
-
+    var closePopup = window.filter.closePopup;
     popupElement.querySelector('img').src = pin.author.avatar;
 
     popupElement.querySelector('.popup__title').textContent = pin.offer.title;
@@ -63,25 +64,37 @@
     }
 
     var buttonClose = popupElement.querySelector('.popup__close');
-    debugger;
+
     buttonClose.addEventListener('click', closePopup, {once: true});
+    document.addEventListener('keydown', onPopupEscPress);
 
+    var ESC_KEYCODE = 'Escape';
 
-    var onCardEscKeyDown = function (evt) {
-      debugger;
-      window.map.onEscDown(evt, closePopup);
+    var onEscDown = function (evt, func) {
+      if (evt.code === ESC_KEYCODE) {
+        func();
+      }
     };
 
+    var onPopupEscPress = function (evt) {
+      if (evt.key === ESC_KEYCODE) {
+        closePopup();
+      }
+    };
+
+    var onCardEscKeyDown = function (evt) {
+      onEscDown(evt, closePopup);
+    };
 
     var filterContainer = map.querySelector('.map__filters-container');
 
     filterContainer.before(popupElement);
-    // return popupElement;
+
     document.addEventListener('keydown', onCardEscKeyDown);
   };
 
   window.popup = {
     renderPopup: renderPopup,
-    closePopup: closePopup,
+    // closePopup: closePopup,
   };
 })();

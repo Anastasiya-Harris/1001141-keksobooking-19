@@ -6,6 +6,7 @@
   var MAIN_PIN_WIDTH = 156;
   var PIN_HEIGHT = 50;
   var PIN_WIDTH = 70;
+  var buttonClose = document.querySelector('.popup__close');
   // var MAX_ADS_COUNT = 5;
 
   // Неактивное состояние.
@@ -19,6 +20,11 @@
 
   var onChangeFilter = function () {
     window.filter.onSortPins(loadedAdvertisings);
+
+    // buttonClose.addEventListener('click', function (evt) {
+    //   window.popup.closePopup();
+    //   evt.currentTarget.classList.add('map__pin--active');
+    // });
     // onCardEscKeyDown();
     // закрывать открытую карточку объявления
     // window.popup.closePopup();
@@ -83,13 +89,6 @@
     loadedAdvertisings = ads;
     window.filter.onSortPins(loadedAdvertisings);
     startFilter();
-    // if (ads.length > MAX_ADS_COUNT) {
-    //   var adsResalt = ads.splice(0, MAX_ADS_COUNT);
-    //   window.pin.renderPins(adsResalt);
-    // }
-    // window.filter.onSortPins(ads);
-
-    // window.pin.renderPins(ads);
   };
 
   var successTemplate = document.querySelector('#success').content.querySelector('.success');
@@ -101,7 +100,6 @@
     window.pin.removePins();
     addFormDisabled();
     disactivateMap();
-    // successMessage();
     successMessage(successTemplate);
     stopFilter();
   };
@@ -137,7 +135,7 @@
     disactivateMap();
   };
 
-  // Универсальная функция закрытия окна///////////////вынести в отдельный модуль!!!
+  // Универсальная функция закрытия окна//////
   var ESC_KEYCODE = 'Escape';
 
   var onEscDown = function (evt, func) {
@@ -146,29 +144,35 @@
     }
   };
 
-  // var onCardEscKeyDown = function (evt) {
-  //   onEscDown(evt, window.popup.closePopup);
-  // };
-
   var main = document.querySelector('main');
 
   var successMessage = function (messageTemplate) {
     var messageElement = messageTemplate.cloneNode(true);
     main.appendChild(messageElement);
-    var messageKeydownHandler = function (evt) {
+    document.addEventListener('keydown', onMessageClick);
+
+    var onSuccesMessageKeydown = function (evt) {
       if (evt.key === 'Escape') {
         main.removeChild(messageElement);
-        document.removeEventListener('keydown', messageKeydownHandler);
+        document.removeEventListener('keydown', onSuccesMessageKeydown);
       }
     };
-    var messageClickHandler = function (evt) {
-      if (evt.target.closest('div')) {
-        main.remove(messageElement);
-        document.removeEventListener('keydown', messageClickHandler);
-      }
-    };
-    document.addEventListener('keydown', messageKeydownHandler);
-    document.addEventListener('click', messageClickHandler);
+    // var onMessageClick = function (evt) {
+    //   if (evt.target.closest('div')) {
+    //     main.remove(messageElement);
+    //     document.removeEventListener('keydown', onMessageClick);
+    //   }
+    // };
+    document.addEventListener('keydown', onSuccesMessageKeydown);
+    document.addEventListener('click', onMessageClick);
+  };
+
+  var onMessageClick = function (evt) {
+    var success = document.querySelector('.success');
+    if (evt.target !== successMessage) {
+      success.classList.add('hidden');
+      document.removeEventListener('keydown', onMessageClick);
+    }
   };
 
   // Сбрасывает форму
@@ -239,6 +243,6 @@
     onEscDown: onEscDown,
     disactivateMap: disactivateMap,
     addMapDisabled: addMapDisabled,
-    // onSuccess: onSuccess,
+
   };
 })();
