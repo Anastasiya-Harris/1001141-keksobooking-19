@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var MAX_ADS_COUNT = 5;
   var mapFilters = document.querySelector('.map__filters');
   var housingType = mapFilters.querySelector('#housing-type');
   var housingPrice = mapFilters.querySelector('#housing-price');
@@ -8,7 +9,7 @@
   var housingQuests = mapFilters.querySelector('#housing-guests');
   var housingFeatures = mapFilters.querySelector('#housing-features');
 
-  var housing = [];
+  // var housing = [];
 
   var Price = {
     LOW: 10000,
@@ -68,16 +69,10 @@
 
     // массив с удобствами
     var sumFeatures = data.offer.features;
-    // возвращает те значения которые удовлетворяют следующим условиям: в data.offer.features (каждого обьекта в массиве data) есть хотя бы одно значения инпута из массива inputFeatures
-    // сравниваем каждое значение элемента массива чекнутых инпутов inputFeatures
-    // с каждым элементом массива удобств sumFeatures
+
     return inputFeatures.every(function (inputElement) {
-      // every так как проверям ВСЕ ли элементы равны условиям функции(то есть возратят true после выполнения условий функции)
       return sumFeatures.some(function (featuresElement) {
-        // some так как проверяем есть ли ОДНО такое значение в массиве значений = и если хоть одно есть то возвращает true
-
         return featuresElement === inputElement.value;
-
       });
     });
 
@@ -86,48 +81,24 @@
   // Фильтр данных
   var onSortPins = function (data) {
 
-    debugger;
-
     window.pin.removePins();
 
     var i = 0;
-
-    var housingCopy = [];
-    while (i < housing.length && housingCopy.length < 5) {
-      debugger;
-      data = housing[i];
-      if (filterType(data) && filterPriceMiddle(data) && filterRooms(data) && filterGuest(data) && filterFeatures(data)) {
-        housingCopy.push(data);
+    var filtredAdvertising = [];
+    while (i < data.length && filtredAdvertising.length < MAX_ADS_COUNT) {
+      // debugger;
+      var advertising = data[i];
+      if (filterType(advertising) && filterPriceMiddle(advertising) && filterRooms(advertising) && filterGuest(advertising) && filterFeatures(advertising)) {
+        filtredAdvertising.push(advertising);
       }
       i++;
     }
 
     // отрисовываем массив
-    window.pin.renderPins(housingCopy);
+    window.pin.renderPins(filtredAdvertising);
   };
 
-  // var startFilter = function () {
-  //   window.debounce.debounce(onSortPins);
-  // };
-
-  mapFilters.addEventListener('change', window.debounce.debounce(onSortPins));
-
-
-  // var onFilterChange = window.debounce.debounce(function () {
-  //   filteredData = data.slice(0);
-  //   filteredData = filteredData.filter(filterType).filter(filterPriceMiddle).filter(filterRooms).filter(filterGuest).filter(filterFeatures);
-  //   window.pin.removePins();
-  //   window.popup.closePopup();
-  //
-  // });
-  // mapFilters.addEventListener('change', onFilterChange);
-  // onSortPins();
-
-
-  // onSortPins();
   window.filter = {
     onSortPins: onSortPins,
-    // onSortPins: onSortPins
   };
 })();
-
