@@ -66,7 +66,7 @@
     var buttonClose = popupElement.querySelector('.popup__close');
 
     buttonClose.addEventListener('click', closePopup, {once: true});
-    document.addEventListener('keydown', onPopupEscPress, {once: true});
+    document.addEventListener('keydown', onPopupEscPress);
 
     var ESC_KEYCODE = 'Escape';
 
