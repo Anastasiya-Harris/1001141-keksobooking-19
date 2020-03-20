@@ -18,14 +18,6 @@
 
   var onChangeFilter = function () {
     window.filter.onSortPins(loadedAdvertisings);
-
-    // buttonClose.addEventListener('click', function (evt) {
-    //   window.popup.closePopup();
-    //   evt.currentTarget.classList.add('map__pin--active');
-    // });
-    // onCardEscKeyDown();
-    // закрывать открытую карточку объявления
-    // window.popup.closePopup();
   };
 
 

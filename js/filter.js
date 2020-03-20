@@ -99,18 +99,18 @@
     deletePin();
 
     var i = 0;
-    var filtredAdvertising = [];
+    var filtredAdvertisings = [];
 
-    while (i < data.length && filtredAdvertising.length < MAX_ADS_COUNT) {
+    while (i < data.length && filtredAdvertisings.length < MAX_ADS_COUNT) {
       var advertising = data[i];
       if (filterType(advertising) && filterPriceMiddle(advertising) && filterRooms(advertising) && filterGuest(advertising) && filterFeatures(advertising)) {
-        filtredAdvertising.push(advertising);
+        filtredAdvertisings.push(advertising);
       }
       i++;
     }
     closePopup();
     // отрисовываем массив
-    window.pin.renderPins(filtredAdvertising);
+    window.pin.renderPins(filtredAdvertisings);
   };
 
   window.filter = {
