@@ -9,8 +9,6 @@
   var housingQuests = mapFilters.querySelector('#housing-guests');
   var housingFeatures = mapFilters.querySelector('#housing-features');
 
-  // var housing = [];
-
   var Price = {
     LOW: 10000,
     MIDDLE: 50000,
@@ -84,11 +82,6 @@
     if (popup) {
       popup.remove();
     }
-
-    // var mapCard = document.querySelector('.map__card');
-    // if (mapCard) {
-    //   mapCard.classList.add('visually-hidden');
-    // }
   };
 
   var deletePin = function () {
@@ -102,8 +95,6 @@
   // Фильтр данных
   var onSortPins = function (data) {
     window.pin.removePins();
-    // window.popup.closePopup();
-
 
     deletePin();
 
@@ -111,7 +102,6 @@
     var filtredAdvertising = [];
 
     while (i < data.length && filtredAdvertising.length < MAX_ADS_COUNT) {
-      // debugger;
       var advertising = data[i];
       if (filterType(advertising) && filterPriceMiddle(advertising) && filterRooms(advertising) && filterGuest(advertising) && filterFeatures(advertising)) {
         filtredAdvertising.push(advertising);

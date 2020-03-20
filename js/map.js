@@ -6,8 +6,6 @@
   var MAIN_PIN_WIDTH = 156;
   var PIN_HEIGHT = 50;
   var PIN_WIDTH = 70;
-  var buttonClose = document.querySelector('.popup__close');
-  // var MAX_ADS_COUNT = 5;
 
   // Неактивное состояние.
   var fieldsets = document.querySelectorAll('fieldset');

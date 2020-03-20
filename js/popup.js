@@ -5,25 +5,6 @@
   var template = document.querySelector('#card').content.querySelector('.map__card');
   var map = document.querySelector('.map');
 
-
-  // var removeActiveClass = function () {
-  //   var activePin = map.querySelector('.map__pin--active');
-
-  //   if (activePin) {
-  //     activePin.classList.remove('map__pin--active');
-  //   }
-  // };
-
-  // var closePopup = function () {
-  //   var popup = map.querySelector('.popup');
-  //   // console.log(popup);
-  //   if (popup) {
-  //     popup.remove();
-  //   }
-  //   // debugger;
-  //   removeActiveClass();
-  // };
-
   // Создаёт DOM-элемент карточки объявления на карте
   var renderPopup = function (pin) {
     var popupElement = template.cloneNode(true);
@@ -41,8 +22,7 @@
     // Получает список удобств, готовит шаблон удобств, удаляет список
     var features = popupElement.querySelectorAll('.popup__feature');
 
-    // если в объявлении есть удобства, добавляем их в зачищенный список,
-    // иначе удаляем его из разметки
+    // если в объявлении есть удобства, добавляем их в зачищенный список, иначе удаляем их из разметки
     for (var i = 0; i < features.length; i++) {
       if (pin.offer.features.indexOf(features[i].classList[1].replace('popup__feature--', '')) === -1) {
         features[i].remove();
@@ -95,6 +75,6 @@
 
   window.popup = {
     renderPopup: renderPopup,
-    // closePopup: closePopup,
   };
 })();
+
