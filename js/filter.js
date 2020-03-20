@@ -78,13 +78,32 @@
 
   };
 
+  var closePopup = function () {
+    var mapCard = document.querySelector('.map__card');
+    if (mapCard) {
+      mapCard.classList.add('visually-hidden');
+    }
+  };
+
+  var deletePin = function () {
+    var Pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    Pins.forEach(function (pin) {
+      pin.remove();
+    });
+  };
+
+
   // Фильтр данных
   var onSortPins = function (data) {
-
     window.pin.removePins();
+    // window.popup.closePopup();
+
+
+    deletePin();
 
     var i = 0;
     var filtredAdvertising = [];
+
     while (i < data.length && filtredAdvertising.length < MAX_ADS_COUNT) {
       // debugger;
       var advertising = data[i];
@@ -93,12 +112,13 @@
       }
       i++;
     }
-
+    closePopup();
     // отрисовываем массив
     window.pin.renderPins(filtredAdvertising);
   };
 
   window.filter = {
     onSortPins: onSortPins,
+    closePopup: closePopup,
   };
 })();

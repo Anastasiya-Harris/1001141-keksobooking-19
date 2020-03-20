@@ -12,7 +12,7 @@
     pinElement.querySelector('img').alt = ad.offer.title;
 
     pinElement.addEventListener('click', function (evt) {
-      window.popup.closePopup();
+      window.filter.closePopup();
       window.popup.renderPopup(ad);
 
       evt.currentTarget.classList.add('map__pin--active');
