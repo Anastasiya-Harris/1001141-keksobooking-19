@@ -1,18 +1,24 @@
 'use strict';
 // map.js — модуль, который управляет карточками объявлений и метками: добавляет на страницу нужную карточку, отрисовывает метки и осуществляет взаимодействие карточки и метки на карте;
-
 (function () {
   var MAIN_PIN_HEIGHT = 156;
   var MAIN_PIN_WIDTH = 156;
   var PIN_HEIGHT = 50;
   var PIN_WIDTH = 70;
+  var PIN_TAIL_HEIGHT = 13;
+  var ESC_KEYCODE = 'Escape';
+  var MAIN_BUTTON_CODE = 0;
 
-  // Неактивное состояние.
-  var fieldsets = document.querySelectorAll('fieldset');
+  var main = document.querySelector('main');
+  var fieldsets = main.querySelectorAll('fieldset');
+  var mapFilters = main.querySelector('.map__filters');
+  var adForm = main.querySelector('.ad-form');
   var mapFilters = document.querySelector('.map__filters');
-  var adForm = document.querySelector('.ad-form');
-  var map = document.querySelector('.map');
+  var map = main.querySelector('.map');
   var adFormResetButton = adForm.querySelector('.ad-form__reset');
+  var mapPinMain = main.querySelector('.map__pin--main');
+  var addressInput = main.querySelector('#address');
+
 
   var loadedAdvertisings = [];
 
@@ -20,17 +26,16 @@
     window.filter.onSortPins(loadedAdvertisings);
   };
 
+  var onDebounceSortingPins = window.debounce.debounce(onChangeFilter);
 
-  var debounceOnSortPins = window.debounce.debounce(onChangeFilter);
-
+  // Неактивное состояние.
   var startFilter = function () {
-    mapFilters.addEventListener('change', debounceOnSortPins);
+    mapFilters.addEventListener('change', onDebounceSortingPins);
   };
 
   var stopFilter = function () {
-    mapFilters.removeEventListener('change', debounceOnSortPins);
+    mapFilters.removeEventListener('change', onDebounceSortingPins);
   };
-
 
   var addFormDisabled = function () {
     for (var i = 0; i < fieldsets.length; i++) {
@@ -43,9 +48,6 @@
       mapFilters[i].setAttribute('disabled', 'disabled');
     }
   };
-
-  var mapPinMain = document.querySelector('.map__pin--main');
-  var addressInput = document.querySelector('#address');
 
   // Блокирует формы
   var disactivateMap = function () {
@@ -81,16 +83,15 @@
     startFilter();
   };
 
-  var successTemplate = document.querySelector('#success').content.querySelector('.success');
-
   // Деактивирует страницу
   var disactivatePage = function () {
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
     window.pin.removePins();
     addFormDisabled();
+    adForm.reset();
+    mapFilters.reset();
     disactivateMap();
-    successMessage(successTemplate);
     stopFilter();
   };
 
@@ -99,94 +100,93 @@
   };
 
   var renderErrorMessage = function (errorMessage) {
-    var main = document.querySelector('main');
     var templateError = document.querySelector('#error').cloneNode(true).content;
     var errorText = templateError.querySelector('.error__message');
     var errorButton = templateError.querySelector('.error__button');
 
+    var onErrorMessageKeydown = function (evt) {
+      onEscKeydown(evt, closeError);
+    };
+
+    var onCloseErrorBtnClick = function (evt) {
+      onMainButtonClick(evt, closeError);
+    };
+
     errorText.textContent = errorMessage;
     main.appendChild(templateError);
-    document.addEventListener('keydown', onMessageKeydown, {once: true});
-    errorButton.addEventListener('click', onCloseErrorBtnClick, {once: true});
+    document.addEventListener('keydown', onErrorMessageKeydown);
+    errorButton.addEventListener('click', onCloseErrorBtnClick);
+
+    var closeError = function () {
+      var error = document.querySelector('.error');
+      error.remove();
+      disactivateMap();
+      document.removeEventListener('keydown', onErrorMessageKeydown);
+      errorButton.removeEventListener('click', onCloseErrorBtnClick);
+    };
   };
 
-  var onMessageKeydown = function (evt) {
-    onEscDown(evt, closeError);
-  };
-
-  var closeError = function () {
-    var errorMessage = document.querySelector('.error');
-    errorMessage.remove();
-  };
-
-  var onCloseErrorBtnClick = function () {
-    closeError();
-    adForm.reset();
-    disactivateMap();
-  };
-
-  // Универсальная функция закрытия окна//////
-  var ESC_KEYCODE = 'Escape';
-
-  var onEscDown = function (evt, func) {
+  var onEscKeydown = function (evt, func) {
     if (evt.code === ESC_KEYCODE) {
       func();
     }
   };
 
-  var main = document.querySelector('main');
-
-  var successMessage = function (messageTemplate) {
-    var messageElement = messageTemplate.cloneNode(true);
-    main.appendChild(messageElement);
-    document.addEventListener('keydown', onMessageClick);
-
-    var onSuccesMessageKeydown = function (evt) {
-      if (evt.key === 'Escape') {
-        main.removeChild(messageElement);
-        document.removeEventListener('keydown', onSuccesMessageKeydown);
-      }
-    };
-    // var onMessageClick = function (evt) {
-    //   if (evt.target.closest('div')) {
-    //     main.remove(messageElement);
-    //     document.removeEventListener('keydown', onMessageClick);
-    //   }
-    // };
-    document.addEventListener('keydown', onSuccesMessageKeydown);
-    document.addEventListener('click', onMessageClick);
-  };
-
-  var onMessageClick = function (evt) {
-    var success = document.querySelector('.success');
-    if (evt.target !== successMessage) {
-      success.classList.add('hidden');
-      document.removeEventListener('keydown', onMessageClick);
+  var onMainButtonClick = function (evt, func) {
+    if (evt.button === MAIN_BUTTON_CODE) {
+      func();
     }
   };
 
-  // Сбрасывает форму
-  var formReset = function (evt) {
+  var renderSuccessMessage = function () {
+    var successTemplate = document.querySelector('#success').content;
+    var messageElement = successTemplate.cloneNode(true);
+    main.appendChild(messageElement);
+    document.addEventListener('keydown', onSuccessMessageKeydown);
+    document.addEventListener('click', onSuccessMessageClick);
+  };
+
+  var onSuccessMessageKeydown = function (evt) {
+    onEscKeydown(evt, removeSuccessMessage);
+  };
+
+  var onSuccessMessageClick = function (evt) {
+    onMainButtonClick(evt, removeSuccessMessage);
+  };
+
+  // Универсальная функция закрытия окна
+  var removeSuccessMessage = function () {
+    var success = document.querySelector('.success');
+    success.remove();
+    document.removeEventListener('keydown', onSuccessMessageKeydown);
+    document.removeEventListener('click', onSuccessMessageClick);
+  };
+
+  // Отправляет содержимое формы на сервер
+  var onSubmitForm = function (evt) {
+    evt.preventDefault();
     window.backend.upload(new FormData(adForm), function () {
-      adForm.reset();
+      renderSuccessMessage();
+      disactivateMap();
       disactivatePage();
     }, onError);
 
-    evt.preventDefault();
     mapPinMain.addEventListener('click', onMainPinMousedown, {once: true});
   };
 
-  adForm.addEventListener('submit', formReset);
+  adForm.addEventListener('submit', onSubmitForm);
 
-  // обработчик кнопки сброса
+  // Обработчик кнопки сброса
   var onResetButtonClick = function (evt) {
     evt.preventDefault();
+    window.filter.closePopup();
     disactivatePage();
+    // disactivateMap();
+    mapPinMain.addEventListener('click', onMainPinMousedown);
   };
 
-
+  // Сбрасывает форму
   adFormResetButton.addEventListener('click', onResetButtonClick);
-
 
   var activateMap = function () {
     window.backend.load(onSuccess, onError);
@@ -203,7 +203,7 @@
   // Ловит позицию метки и передаёт в инпут адрес
   function setInitialAddress(pin) {
     var x = pin.offsetLeft + PIN_WIDTH / 2;
-    var y = pin.offsetTop + PIN_HEIGHT;
+    var y = pin.offsetTop + PIN_HEIGHT + PIN_TAIL_HEIGHT;
     updateAddress(x, y);
   }
 
@@ -229,10 +229,7 @@
   window.map = {
     PIN_HEIGHT: PIN_HEIGHT,
     PIN_WIDTH: PIN_WIDTH,
+    PIN_TAIL_HEIGHT: PIN_TAIL_HEIGHT,
     setCurrentAddress: setCurrentAddress,
-    onEscDown: onEscDown,
-    disactivateMap: disactivateMap,
-    addMapDisabled: addMapDisabled,
-
   };
 })();

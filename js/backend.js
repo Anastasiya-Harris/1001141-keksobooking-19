@@ -1,6 +1,8 @@
 'use strict';
 // backend.js — модуль, который загружает данные;
 (function () {
+  var TIMEOUT_IN_MS = 10000;
+
   var Url = {
     GET: 'https://js.dump.academy/keksobooking/data/',
     POST: 'https://js.dump.academy/keksobooking/'
@@ -13,8 +15,6 @@
     FORBIDDEN: 403,
     NOT_FOUND: 404,
   };
-
-  var TIMEOUT_IN_MS = 10000;
 
   var setXhr = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();

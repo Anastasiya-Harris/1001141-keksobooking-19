@@ -2,8 +2,6 @@
 'use strict';
 (function () {
   // Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»:
-  var typeOfHouseSelector = document.querySelector('#type');
-  var priceInput = document.querySelector('#price');
   var MIN_PRICES = {
     flat: 1000,
     bungalo: 0,
@@ -11,9 +9,21 @@
     palace: 10000
   };
 
+  var typeOfHouseSelector = document.querySelector('#type');
+  var priceInput = document.querySelector('#price');
   var roomsNumberSelector = document.querySelector('#room_number');
   var capacitySelector = document.querySelector('#capacity');
+  var timeInSelector = document.querySelector('#timein');
+  var timeOutSelector = document.querySelector('#timeout');
 
+  // Устанавиливает зависимость времени заселения и выселения
+  var onTimeInSelectorChange = function (evt) {
+    timeOutSelector.value = evt.target.value;
+  };
+
+  var onTimeOutSelectorChange = function (evt) {
+    timeInSelector.value = evt.target.value;
+  };
 
   // Установки мин. цены за ночь в зависимости от типа жилья
   var onTypeOfHouseSelectorChange = function (evt) {
@@ -26,7 +36,7 @@
   typeOfHouseSelector.addEventListener('change', onTypeOfHouseSelectorChange);
 
   // Валидация. Установка соответствия количества гостей (спальных мест) с количеством комнат.
-  function validateRoomNumbers() {
+  function onRoomNumbersChange() {
     var roomsNumber = roomsNumberSelector.value;
     var capacity = capacitySelector.value;
 
@@ -42,6 +52,8 @@
     }
   }
 
-  roomsNumberSelector.addEventListener('change', validateRoomNumbers);
-  capacitySelector.addEventListener('change', validateRoomNumbers);
+  roomsNumberSelector.addEventListener('change', onRoomNumbersChange);
+  capacitySelector.addEventListener('change', onRoomNumbersChange);
+  timeInSelector.addEventListener('change', onTimeInSelectorChange);
+  timeOutSelector.addEventListener('change', onTimeOutSelectorChange);
 })();

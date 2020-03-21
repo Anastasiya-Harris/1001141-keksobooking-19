@@ -43,8 +43,8 @@
       };
 
       var Border = {
-        TOP: DrugLimit.Y.MIN - mapPinMain.offsetHeight - window.map.PIN_HEIGHT,
-        BOTTOM: DrugLimit.Y.MAX - mapPinMain.offsetHeight - window.map.PIN_HEIGHT,
+        TOP: DrugLimit.Y.MIN - mapPinMain.offsetHeight - window.map.PIN_TAIL_HEIGHT,
+        BOTTOM: DrugLimit.Y.MAX - mapPinMain.offsetHeight - window.map.PIN_TAIL_HEIGHT,
         LEFT: DrugLimit.X.MIN,
         RIGHT: DrugLimit.X.MAX - mapPinMain.offsetWidth
       };

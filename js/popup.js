@@ -2,6 +2,14 @@
 // Popup.js — модуль, который работает с формой.
 
 (function () {
+
+  var houseType = {
+    palace: 'Дворец',
+    flat: 'Квартира',
+    house: 'Дом',
+    bungalo: 'Бунгало'
+  };
+
   var template = document.querySelector('#card').content.querySelector('.map__card');
   var map = document.querySelector('.map');
 
@@ -15,7 +23,7 @@
     popupElement.querySelector('.popup__text--address').textContent = pin.offer.address;
     popupElement.querySelector('.popup__text--price').textContent = pin.offer.price;
     popupElement.querySelector('.popup__description').textContent = pin.offer.description;
-    popupElement.querySelector('.popup__type').textContent = pin.offer.type;
+    popupElement.querySelector('.popup__type').textContent = houseType[pin.offer.type];
     popupElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + pin.offer.checkin + ', выезд до ' + pin.offer.checkout;
     popupElement.querySelector('.popup__text--capacity').textContent = pin.offer.rooms + ' комнаты для ' + pin.offer.guests + ' гостей';
 
@@ -45,8 +53,6 @@
 
     var buttonClose = popupElement.querySelector('.popup__close');
 
-    buttonClose.addEventListener('click', closePopup, {once: true});
-    document.addEventListener('keydown', onPopupEscPress);
 
     var ESC_KEYCODE = 'Escape';
 
@@ -70,7 +76,9 @@
 
     filterContainer.before(popupElement);
 
-    document.addEventListener('keydown', onCardEscKeyDown);
+    document.addEventListener('keydown', onCardEscKeyDown, {once: true});
+    buttonClose.addEventListener('click', closePopup, {once: true});
+    document.addEventListener('keydown', onPopupEscPress, {once: true});
   };
 
   window.popup = {
