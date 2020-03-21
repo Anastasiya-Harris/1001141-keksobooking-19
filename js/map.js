@@ -3,9 +3,9 @@
 (function () {
   var MAIN_PIN_HEIGHT = 156;
   var MAIN_PIN_WIDTH = 156;
-  var PIN_HEIGHT = 50;
-  var PIN_WIDTH = 70;
-  var PIN_TAIL_HEIGHT = 13;
+  var PIN_HEIGHT = 65;
+  var PIN_WIDTH = 65;
+  var PIN_TAIL_HEIGHT = 22;
   var ESC_KEYCODE = 'Escape';
   var MAIN_BUTTON_CODE = 0;
 
@@ -13,7 +13,6 @@
   var fieldsets = main.querySelectorAll('fieldset');
   var mapFilters = main.querySelector('.map__filters');
   var adForm = main.querySelector('.ad-form');
-  var mapFilters = document.querySelector('.map__filters');
   var map = main.querySelector('.map');
   var adFormResetButton = adForm.querySelector('.ad-form__reset');
   var mapPinMain = main.querySelector('.map__pin--main');
@@ -202,15 +201,15 @@
 
   // Ловит позицию метки и передаёт в инпут адрес
   function setInitialAddress(pin) {
-    var x = pin.offsetLeft + PIN_WIDTH / 2;
-    var y = pin.offsetTop + PIN_HEIGHT + PIN_TAIL_HEIGHT;
+    var x = pin.offsetLeft + Math.ceil(MAIN_PIN_WIDTH / 2);
+    var y = pin.offsetTop + Math.ceil(MAIN_PIN_HEIGHT / 2);
     updateAddress(x, y);
   }
 
   // Координаты дефолтной метки по указателю
   function setCurrentAddress(pin) {
-    var x = pin.offsetLeft + MAIN_PIN_WIDTH / 2;
-    var y = pin.offsetTop + MAIN_PIN_HEIGHT / 2;
+    var x = pin.offsetLeft + Math.ceil(PIN_WIDTH / 2);
+    var y = pin.offsetTop + Math.ceil(PIN_HEIGHT + PIN_TAIL_HEIGHT);
     updateAddress(x, y);
   }
 
