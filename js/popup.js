@@ -16,7 +16,7 @@
   // Создаёт DOM-элемент карточки объявления на карте
   var renderPopup = function (pin) {
     var popupElement = template.cloneNode(true);
-    var closePopup = window.filter.closePopup;
+    var onClosePopup = window.filter.closePopup;
     popupElement.querySelector('img').src = pin.author.avatar;
 
     popupElement.querySelector('.popup__title').textContent = pin.offer.title;
@@ -64,12 +64,12 @@
 
     var onPopupEscPress = function (evt) {
       if (evt.key === ESC_KEYCODE) {
-        closePopup();
+        onClosePopup();
       }
     };
 
     var onCardEscKeyDown = function (evt) {
-      onEscDown(evt, closePopup);
+      onEscDown(evt, onClosePopup);
     };
 
     var filterContainer = map.querySelector('.map__filters-container');
@@ -77,12 +77,12 @@
     filterContainer.before(popupElement);
 
     document.addEventListener('keydown', onCardEscKeyDown, {once: true});
-    buttonClose.addEventListener('click', closePopup, {once: true});
+    buttonClose.addEventListener('click', onClosePopup, {once: true});
     document.addEventListener('keydown', onPopupEscPress, {once: true});
   };
 
   window.popup = {
-    renderPopup: renderPopup,
+    render: renderPopup,
   };
 })();
 

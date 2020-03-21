@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var DEBOUNCE_INTERVAL = 500;
+  var DEBOUNCE_INTERVAL = 300;
 
   var debounce = function (fun) {
     var lastTimeout = null;
@@ -21,7 +21,7 @@
   };
 
   window.debounce = {
-    debounce: debounce,
+    delay: debounce,
   };
 })();
 

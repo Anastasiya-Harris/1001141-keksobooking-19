@@ -25,7 +25,7 @@
     window.filter.onSortPins(loadedAdvertisings);
   };
 
-  var onDebounceSortingPins = window.debounce.debounce(onChangeFilter);
+  var onDebounceSortingPins = window.debounce.delay(onChangeFilter);
 
   // Неактивное состояние.
   var startFilter = function () {
@@ -86,9 +86,10 @@
   var disactivatePage = function () {
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
-    window.pin.removePins();
+    window.pin.remove();
     addFormDisabled();
     adForm.reset();
+    window.filter.closePopup();
     mapFilters.reset();
     disactivateMap();
     stopFilter();
@@ -180,7 +181,6 @@
     evt.preventDefault();
     window.filter.closePopup();
     disactivatePage();
-    // disactivateMap();
     mapPinMain.addEventListener('click', onMainPinMousedown);
   };
 

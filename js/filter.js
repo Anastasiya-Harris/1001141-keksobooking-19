@@ -88,7 +88,7 @@
 
   // Фильтрует данные
   var onSortPins = function (data) {
-    window.pin.removePins();
+    window.pin.remove();
 
     deletePin();
 
@@ -104,7 +104,7 @@
     }
     closePopup();
     // отрисовываем массив
-    window.pin.renderPins(filtredAdvertisings);
+    window.pin.render(filtredAdvertisings);
   };
 
   window.filter = {
