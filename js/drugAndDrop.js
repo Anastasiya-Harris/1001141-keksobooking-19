@@ -14,7 +14,6 @@
     }
   };
 
-
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
@@ -45,8 +44,8 @@
       var Border = {
         TOP: DrugLimit.Y.MIN - mapPinMain.offsetHeight - window.map.PIN_TAIL_HEIGHT,
         BOTTOM: DrugLimit.Y.MAX - mapPinMain.offsetHeight - window.map.PIN_TAIL_HEIGHT,
-        LEFT: DrugLimit.X.MIN,
-        RIGHT: DrugLimit.X.MAX - mapPinMain.offsetWidth
+        LEFT: DrugLimit.X.MIN - window.map.PIN_WIDTH / 2,
+        RIGHT: DrugLimit.X.MAX - mapPinMain.offsetWidth + window.map.PIN_WIDTH / 2
       };
 
       if (mapPinMainPosition.x >= Border.LEFT && mapPinMainPosition.x <= Border.RIGHT) {
