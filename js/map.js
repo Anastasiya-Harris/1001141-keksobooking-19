@@ -9,6 +9,9 @@
   var ESC_KEYCODE = 'Escape';
   var MAIN_BUTTON_CODE = 0;
 
+  var DEFAULT_MAIN_PIN_X = 600;
+  var DEFAULT_MAIN_PIN_Y = 375;
+
   var main = document.querySelector('main');
   var fieldsets = main.querySelectorAll('fieldset');
   var mapFilters = main.querySelector('.map__filters');
@@ -53,6 +56,8 @@
     addFormDisabled();
     addMapDisabled();
     setInitialAddress(mapPinMain);
+    mapPinMain.style.top = DEFAULT_MAIN_PIN_Y + 'px';
+    mapPinMain.style.left = DEFAULT_MAIN_PIN_X + 'px';
   };
 
 
@@ -93,6 +98,7 @@
     mapFilters.reset();
     disactivateMap();
     stopFilter();
+    // setInitialAddress(mapPinMain);
   };
 
   var onError = function (errorMessage) {
@@ -218,7 +224,7 @@
   var onMainPinMousedown = function (evt) {
     if (evt.button === 0) {
       activateMap();
-      setCurrentAddress(mapPinMain);
+      setInitialAddress(mapPinMain);
     }
   };
   // Третий аргумент говорит что событие должно произойти 1 раз, затем обработкик удалится
@@ -229,6 +235,8 @@
     PIN_HEIGHT: PIN_HEIGHT,
     PIN_WIDTH: PIN_WIDTH,
     PIN_TAIL_HEIGHT: PIN_TAIL_HEIGHT,
+    MAIN_PIN_HEIGHT: MAIN_PIN_HEIGHT,
+    MAIN_PIN_WIDTH: MAIN_PIN_WIDTH,
     setCurrentAddress: setCurrentAddress,
   };
 })();
