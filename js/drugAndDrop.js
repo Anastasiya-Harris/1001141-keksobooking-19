@@ -54,18 +54,8 @@
       if (mapPinMainPosition.y >= Border.TOP && mapPinMainPosition.y <= Border.BOTTOM) {
         mapPinMain.style.top = mapPinMainPosition.y + 'px';
       }
-      var pinTailCoords = {
-        x: mapPinMainPosition.x + Math.ceil(window.map.PIN_WIDTH / 2),
-        y: mapPinMainPosition.y + window.map.PIN_HEIGHT + window.map.PIN_HEIGHT
-      };
 
-
-      var setAddress = function (coords) {
-        var addressInput = document.querySelector('#address');
-        addressInput.value = coords.x + ', ' + coords.y;
-      };
-
-      setAddress(pinTailCoords);
+      window.map.setCurrentAddress(mapPinMain);
     };
 
     var onMouseUp = function (upEvt) {
