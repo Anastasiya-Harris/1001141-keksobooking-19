@@ -55,9 +55,9 @@
   var disactivateMap = function () {
     addFormDisabled();
     addMapDisabled();
+    mapPinMain.style.top = DEFAULT_MAIN_PIN_Y - PIN_HEIGHT / 2 + 'px';
+    mapPinMain.style.left = DEFAULT_MAIN_PIN_X - PIN_WIDTH / 2 + 'px';
     setInitialAddress(mapPinMain);
-    mapPinMain.style.top = DEFAULT_MAIN_PIN_Y + 'px';
-    mapPinMain.style.left = DEFAULT_MAIN_PIN_X + 'px';
   };
 
 
@@ -207,15 +207,16 @@
 
   // Ловит позицию метки и передаёт в инпут адрес
   function setInitialAddress(pin) {
-    var x = pin.offsetLeft + Math.ceil(MAIN_PIN_WIDTH / 2);
-    var y = pin.offsetTop + Math.ceil(MAIN_PIN_HEIGHT / 2);
+    var x = pin.offsetLeft + Math.floor(PIN_WIDTH / 2);
+    var y = pin.offsetTop + Math.floor(PIN_HEIGHT / 2);
     updateAddress(x, y);
   }
 
+
   // Координаты дефолтной метки по указателю
   function setCurrentAddress(pin) {
-    var x = pin.offsetLeft + Math.ceil(PIN_WIDTH / 2);
-    var y = pin.offsetTop + Math.ceil(PIN_HEIGHT + PIN_TAIL_HEIGHT);
+    var x = pin.offsetLeft + Math.floor(PIN_WIDTH / 2);
+    var y = pin.offsetTop + PIN_HEIGHT + PIN_TAIL_HEIGHT;
     updateAddress(x, y);
   }
 
@@ -224,7 +225,7 @@
   var onMainPinMousedown = function (evt) {
     if (evt.button === 0) {
       activateMap();
-      setInitialAddress(mapPinMain);
+      setCurrentAddress(mapPinMain);
     }
   };
   // Третий аргумент говорит что событие должно произойти 1 раз, затем обработкик удалится
